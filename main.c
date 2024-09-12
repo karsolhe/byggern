@@ -1,8 +1,5 @@
 #include "uart.h"
-
-//#include <avr/io.h>
-
-
+#include "memory_map.h"
 
 void main() {
 
@@ -15,13 +12,17 @@ void main() {
     //     _delay_ms(300);
     // }
 
-    uart_init(MYUBRR);
+    // uart_init(MYUBRR);
     // uart_test();
 
-    while(1) {
-        printf("Hei");
-        _delay_ms(300);
-    }
+    // while(1) {
+    //     printf("Hei");
+    //     _delay_ms(300);
+    // }
 
-}
+    memory_init();
+
+    led_test();
+
+} 
 

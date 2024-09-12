@@ -1,4 +1,4 @@
-#define F_CPU 4915200
+#define F_CPU 4915200 
 #include <avr/io.h>
 #include <avr/delay.h>
 #include <stdio.h>
@@ -9,8 +9,8 @@
 
 void uart_init(unsigned int ubrr);
 
-void uart_send(unsigned char data, FILE * file);
+void uart_send(unsigned char data);
 
-unsigned char uart_receive(FILE * file);
+unsigned char uart_receive(void);
 
 void uart_test();
