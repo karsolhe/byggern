@@ -22,7 +22,18 @@ void main() {
 
     memory_init();
 
-    led_test();
+    PORTA = 0b00000001;
+    _delay_ms(1000);
+    PORTA = 0b00000010;
+    _delay_ms(1000);
+    PORTA = 0b00000011;
+
+    PORTE = 0b000;
+
+    _delay_ms(1000);
+    PORTA = 0b00000000;
+
+
 
 } 
 
