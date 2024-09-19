@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <avr/delay.h>
 
-void memory_init();
+void latch_init();
 
 void output_enable();
 

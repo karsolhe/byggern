@@ -9,8 +9,12 @@
 
 void uart_init(unsigned int ubrr);
 
-void uart_send(unsigned char data);
+int uart_send(unsigned char data, FILE * file);
 
-unsigned char uart_receive(void);
+int uart_receive(FILE * file);
+
+// void uart_send(unsigned char data);
+
+// unsigned char uart_receive(void);
 
 void uart_test();

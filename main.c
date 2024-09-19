@@ -1,18 +1,20 @@
 #include "uart.h"
-#include "memory_map.h"
+#include "latch.h"
+#include "SRAM_test.h"
 
 void main() {
 
-    // DDRA = 0x20; // Setter pin 5 til input
+    // DDRA = 0b1000; // Setter pin 5 til input
 
     // while(1) {
-    //     PORTA = 0x20; // Gjør pin 5 høy
+    //     PORTA = 0b1000; // Gjør pin 5 høy
     //     _delay_ms(300);
     //     PORTA = 0;
     //     _delay_ms(300);
     // }
 
-    // uart_init(MYUBRR);
+    uart_init(MYUBRR);
+    
     // uart_test();
 
     // while(1) {
@@ -20,20 +22,12 @@ void main() {
     //     _delay_ms(300);
     // }
 
-    memory_init();
+    //latch_init();
 
-    PORTA = 0b00000001;
-    _delay_ms(1000);
-    PORTA = 0b00000010;
-    _delay_ms(1000);
-    PORTA = 0b00000011;
+    //led_test();
 
-    PORTE = 0b000;
+    SRAM_init();
 
-    _delay_ms(1000);
-    PORTA = 0b00000000;
-
-
-
+    SRAM_test();
 } 
 
