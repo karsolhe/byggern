@@ -1,6 +1,8 @@
 #include "uart.h"
 #include "latch.h"
 #include "SRAM_test.h"
+#include "address_decoder.h"
+#include "joystick.h"
 
 void main() {
 
@@ -26,8 +28,12 @@ void main() {
 
     //led_test();
 
-    SRAM_init();
+    //SRAM_init();
 
-    SRAM_test();
+    //SRAM_test();
+
+    //address_decoder_test();
+
+    joystick_test();
 } 
 

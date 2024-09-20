@@ -9,3 +9,5 @@ typedef struct {
     volatile uint32_t SRAM[512];
 } EXTERNAL_MEMORY;
 
+void address_decoder_test();
+
