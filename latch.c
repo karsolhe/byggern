@@ -7,15 +7,6 @@ void latch_init() {
 
     DDRA = 0b11111111;
 }
-    
-
-void output_enable() {
-
-}
-
-void latch_enable() {
-
-}
 
 void led_test() {
 

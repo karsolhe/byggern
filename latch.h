@@ -4,8 +4,4 @@
 
 void latch_init();
 
-void output_enable();
-
-void latch_enable();
-
 void led_test();

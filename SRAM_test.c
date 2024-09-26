@@ -16,7 +16,7 @@ void print_binary(uint8_t num) {
     }
 }
 
-void SRAM_test(void) {
+void SRAM_test(void) { 
     volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
     uint16_t ext_ram_size = 0x800;
     uint16_t write_errors = 0;
