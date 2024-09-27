@@ -4,6 +4,7 @@
 #include "address_decoder.h"
 #include "joystick.h"
 #include "adc.h"
+#define F_CPU 4915200 
 
 void main() {
 
@@ -43,7 +44,13 @@ void main() {
 
     while(1) {
         volatile char *adc = (char*) 0x1400;
-       
+        adc[0] = 0b00000001;
+
+        _delay_ms(5);
+
+        uint8_t value = adc[0];
+        printf("Value: %d\n", value);
+        _delay_ms(1000);
     }
 } 
 
