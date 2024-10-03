@@ -2,8 +2,9 @@
 #include "latch.h"
 #include "SRAM_test.h"
 #include "address_decoder.h"
-#include "joystick.h"
+#include "joystick_sliders.h"
 #include "adc.h"
+#include "oled.h"
 #define F_CPU 4915200 
 
 void main() {
@@ -41,16 +42,31 @@ void main() {
 
     adc_init();
 
+    // while(1) {
+        
+        
+        //pos_t joy_p = joystick_pos();
+        //sliders_t sliders_p = sliders_pos();
 
-    while(1) {
-        volatile char *adc = (char*) 0x1400;
-        adc[0] = 0b00000001;
+        //pos_t pos = pos_read();
 
-        _delay_ms(5);
+        //printf("Joystick_x: %d\n\r", joy_p.x);
+        //printf("Joystick_y: %d\n\r", joy_p.y);
 
-        uint8_t value = adc[0];
-        printf("Value: %d\n", value);
-        _delay_ms(1000);
-    }
-} 
+        // printf("Joystick_x: %d\n\r", joy_perc.x);
+        // printf("Joystick_y: %d\n\r", joy_perc.y);
+        //printf("Sliders_left: %d\n\r", sliders_p.left);
+        //printf("Sliders_right: %d\n\r", sliders_p.right);
+        //printf("Value_x: %d\n\r", pos.x);
+        //printf("Value_y: %d\n\r", pos.y);
+
+    //     _delay_ms(1000);
+    // }
+
+    //EXERCISE 4
+
+    OLED_init();
+
+    OLED_write_data(0b00000000);
+};
 
