@@ -2,6 +2,10 @@
 
 void OLED_init();
 
+void write_c();
+
+void write_d();
+
 void OLED_reset();
 
 void OLED_home();
