@@ -65,8 +65,29 @@ void main() {
 
     //EXERCISE 4
 
+    DDRB &= ~(1 << PB2); 
+    PORTB |= (1 << PB2); // Set pull-up resistor
+
+    while(1) {
+        uint8_t i = joystick_button();
+        printf("Button: %d\n\r", i);
+        _delay_ms(1000);
+    }
+
     OLED_init();
 
-    OLED_write_data(0b00000000);
+    OLED_reset();
+    //while(1) {
+        // OLED_print_string("Hello World!");
+        // _delay_ms(1000);
+        // OLED_clear_line(0);
+        // _delay_ms(1000);
+
+        
+    //}
+    
+
+    //OLED_print_arrow(1, 10);
+
 };
 

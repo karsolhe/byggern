@@ -1,6 +1,8 @@
 #include "oled.h"
 #include <avr/io.h>
 #include <stdint.h>
+#include "fonts.h"
+
 
 volatile char *oled_c = (char*) 0x1000;
 volatile char *oled_d = (char*) 0x1200;
@@ -14,43 +16,7 @@ void write_d(uint8_t data) {
 }
 
 
-void OLED_init() {
-    write_c(0xae); // display off
-    write_c(0xa1); //segment remap
-    write_c(0xda); //common pads hardware: alternative
-    write_c(0x12);
-    write_c(0xc8); //common output scan direction:com63~com0
-    write_c(0xa8); //multiplex ration mode:63
-    write_c(0x3f);
-    write_c(0xd5); //display divide ratio/osc. freq. mode
-    write_c(0x80);
-    write_c(0x81); //contrast control
-    write_c(0x50);
-    write_c(0xd9); //set pre-charge period
-    write_c(0x21);
-    write_c(0x20); //Set Memory Addressing Mode
-    write_c(0x02); //page addressing mode
-    write_c(0xdb); //VCOM deselect level mode
-    write_c(0x30);
-    write_c(0xad); //master configuration
-    write_c(0x00);
-    write_c(0xa4); //out follows RAM content
-    write_c(0xa6); //set normal display
-    write_c(0xaf); // display on
-}
 
-void OLED_reset(){
-    //iterate through pages and columns and set all to 0
-    //set
-    for(int i = 0; i < 8; i++) {
-        write_c(0xb0 + i); // set page start address
-        write_c(0x00); // set lower bits in column start address
-        write_c(0x10); // set higher bits in column start address
-        for(int j = 0; j < 128; j++) {
-            write_d(0);
-        }
-    }
-}
 
 void OLED_home(){
 
@@ -81,9 +47,23 @@ void OLED_clear_line(uint8_t line){
     write_d(0b00000000);
 }
 
+
+void OLED_reset(){
+    //iterate through pages and columns and set all to 0
+    for(int i = 0; i < 8; i++) {
+        write_c(0xb0 + i); // set page start address
+        write_c(0x00); // set lower bits in column start address
+        write_c(0x10); // set higher bits in column start address
+        for(int j = 0; j < 128; j++) {
+            write_d(0b00000000);
+        }
+    }
+}
+
+
 void OLED_pos(uint8_t line, uint8_t column){
     //find correct page by dividing line by 8
-    uint8_t page = line / 8;   //kanskje heller page_nr som parameter
+    uint8_t page = line; // / 8;   //kanskje heller page_nr som parameter
     write_c(0xb0 + page); //set page start address
     //low_bits = column & 0x0f;
     //set column start address 
@@ -111,4 +91,40 @@ void OLED_print_string(char* str){
 
 void OLED_set_brightness(int lvl){
 
+}
+
+void OLED_print_arrow(uint8_t page, uint8_t column){
+    OLED_pos(page, column);
+    OLED_write_data(0b00011000);
+    OLED_write_data(0b00011000);
+    OLED_write_data(0b01111110);
+    OLED_write_data(0b00111100);
+    OLED_write_data(0b00011000);
+}
+
+void OLED_init() {
+    write_c(0xae); // display off
+    write_c(0xa1); //segment remap
+    write_c(0xda); //common pads hardware: alternative
+    write_c(0x12);
+    write_c(0xc8); //common output scan direction:com63~com0
+    write_c(0xa8); //multiplex ration mode:63
+    write_c(0x3f);
+    write_c(0xd5); //display divide ratio/osc. freq. mode
+    write_c(0x80);
+    write_c(0x81); //contrast control
+    write_c(0x50);
+    write_c(0xd9); //set pre-charge period
+    write_c(0x21); 
+    write_c(0x20); //Set Memory Addressing Mode
+    write_c(0x02); //page addressing mode
+    write_c(0xdb); //VCOM deselect level mode
+    write_c(0x30);
+    write_c(0xad); //master configuration
+    write_c(0x00);
+    write_c(0xa4); //out follows RAM content
+    write_c(0xa6); //set normal display
+    write_c(0xaf); // display on
+    OLED_pos(0, 0);
+    
 }

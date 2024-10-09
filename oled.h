@@ -2,9 +2,9 @@
 
 void OLED_init();
 
-void write_c();
+void write_c(uint8_t data);
 
-void write_d();
+void write_d(uint8_t data);
 
 void OLED_reset();
 
@@ -20,6 +20,10 @@ void OLED_pos(uint8_t line, uint8_t column);
 
 void OLED_write_data(char c);
 
-void OLED_print_char(char* c);
+void OLED_print_letter(char c);
+
+void OLED_print_string(char* str);
 
 void OLED_set_brightness(int lvl);
+
+void OLED_print_arrow(uint8_t page, uint8_t column);

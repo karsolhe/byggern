@@ -20,6 +20,11 @@ pos_t joystick_percent() {
     return pos;
 }
 
+uint8_t joystick_button() {
+    return (PINB & (1 << PB2)) ? 0 : 1;
+}
+
+
 Direction joystick_dir() {
     Direction dir = NEUTRAL;
 

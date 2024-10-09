@@ -21,6 +21,8 @@ void joystick_calibrate();
 
 enum Direction joystick_dir();
 
+uint8_t joystick_button();
+
 sliders_t sliders_pos();
 
 sliders_t sliders_percent();
