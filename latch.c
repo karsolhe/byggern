@@ -1,11 +1,11 @@
 #include "latch.h"
 
 void latch_init() {
-    DDRE = 0b010;
+    DDRE = 0b010; //Set ALE signal to output
 
     PORTE = 0b10;
 
-    DDRA = 0b11111111;
+    DDRA = 0b11111111; 
 }
 
 void led_test() {

@@ -1,5 +1,8 @@
 #include <avr/io.h>
 
+//#define oled_c ((volatile char *) 0x1000)
+//#define oled_d ((volatile char *) 0x1200)
+
 void OLED_init();
 
 void write_c(uint8_t data);

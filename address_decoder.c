@@ -3,19 +3,18 @@
 #include <util/delay.h>
 
 void address_decoder_test() {
-    DDRC = (1 << PC0) | (1 << PC1) | (1 << PC2) | (1 << PC3);
     
-    PORTC = 0b1000; // SRAM
+    volatile char *oled_c = (char *) 0x1000;
+    volatile char *oled_d = (char *) 0x1200;
+    volatile char *adc = (char *) 0x1400;
+    volatile char *sram = (char *) 0x1800;
+
+    oled_c[0] = 0;
     _delay_ms(5000);
-    PORTC = 0b1111; // SRAM
+    oled_d[0] = 0;
     _delay_ms(5000);
-    PORTC = 0b0100; // ADC
+    adc[0] = 0;
     _delay_ms(5000);
-    PORTC = 0b0101; // ADC
-    _delay_ms(5000);
-    PORTC = 0b1111; // SRAM
-    _delay_ms(5000);
-    PORTC = 0b0000; // OLED
-    _delay_ms(5000);
-    PORTC = 0b0011; // OLED
+    sram[0] = 0;
+    _delay_ms(7000);
 };

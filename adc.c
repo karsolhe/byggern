@@ -11,7 +11,7 @@
 
 void adc_init() {
     
-    MCUCR |= (1 << SRE);
+    MCUCR |= (1 << SRE); //Enable external memory
     SFIOR &= ~(0b111<<XMM0); //Clears the three last bits
     SFIOR |= (1 << XMM2);  //Disables pins used by JTA
 

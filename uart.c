@@ -1,7 +1,7 @@
 #include "uart.h" 
 
 void uart_init(unsigned int ubrr) {
-    UBRR0L = (unsigned char)ubrr;
+    UBRR0L = (unsigned char)ubrr; 
     UBRR0H = (unsigned char)(ubrr>>8);
     
     UCSR0B = (1<<RXEN0) | (1<<TXEN0); //Enable receiver and transmitter
