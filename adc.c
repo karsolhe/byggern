@@ -10,10 +10,6 @@
 
 
 void adc_init() {
-    
-    MCUCR |= (1 << SRE); //Enable external memory
-    SFIOR &= ~(0b111<<XMM0); //Clears the three last bits
-    SFIOR |= (1 << XMM2);  //Disables pins used by JTA
 
     DDRD |= (1 << PD4); // Set pin D4 to output
     TCCR3A |= (1<<WGM31); // Set pin D4 to fast PWM mode
@@ -54,6 +50,3 @@ uint8_t adc_read(uint8_t channel) {
     return data;
 }
 
-void pos_calibrate() {
-
-}

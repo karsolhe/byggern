@@ -8,8 +8,8 @@ void joystick_calibrate() {
 
 pos_t joystick_pos() {
     pos_t pos = {0, 0};
-    pos.x = adc_read(0)-29;
-    pos.y = adc_read(1)-27;
+    pos.x = adc_read(0);
+    pos.y = adc_read(1);
     return pos;
 }
 
@@ -22,6 +22,21 @@ pos_t joystick_percent() {
 
 uint8_t joystick_button() {
     return (PINB & (1 << PB2)) ? 0 : 1;
+}
+
+touch_buttons touch_button() {
+    touch_buttons buttons = {0, 0};
+    buttons.left = (PINB & (1 << PB3)) ? 1 : 0;
+    buttons.right = (PINB & (1 << PB1)) ? 1 : 0;
+    return buttons;
+}
+
+uint8_t left_touch_button() {
+    return (PINB & (1 << PB3)) ? 1 : 0;
+}
+
+uint8_t right_touch_button() {
+    return (PINB & (1 << PB1)) ? 1 : 0;
 }
 
 

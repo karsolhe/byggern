@@ -13,20 +13,22 @@ void OLED_reset();
 
 void OLED_home();
 
-void OLED_goto_line(uint8_t line);
+void OLED_goto_page(uint8_t page);
 
 void OLED_goto_column(uint8_t column);
 
-void OLED_clear_line(uint8_t line);
+void OLED_clear_page(uint8_t page);
 
-void OLED_pos(uint8_t line, uint8_t column);
+void OLED_pos(uint8_t page, uint8_t column);
 
 void OLED_write_data(char c);
 
-void OLED_print_letter(char c);
+void OLED_print_char(char c);
 
 void OLED_print_string(char* str);
 
 void OLED_set_brightness(int lvl);
 
 void OLED_print_arrow(uint8_t page, uint8_t column);
+
+void OLED_erase_arrow(uint8_t page, uint8_t column);

@@ -1,22 +1,20 @@
 #include "uart.h"
 #include "latch.h"
-#include "SRAM_test.h"
+#include "SRAM.h"
 #include "address_decoder.h"
 #include "joystick_sliders.h"
 #include "adc.h"
 #include "oled.h"
+#include "menu.h"
 #define F_CPU 4915200 
 
 
+
+volatile char *oled_c = (char *) 0x1000;
+volatile char *oled_d = (char *) 0x1200;
+
 void main() {
-    MCUCR |= (1 << SRE);//Enable external memory
-    SFIOR &= ~(0b111<<XMM0); //Clears the three last bits
-    SFIOR |= (1 << XMM2);  //Disables pins used by JTA
-
-    volatile char *oled_c = (char *) 0x1000;
-    volatile char *oled_d = (char *) 0x1200;
-
-    //EXERCISE 1
+    //!EXERCISE 1
 
     // DDRA = 0b1000; // Setter pin 5 til input
 
@@ -28,110 +26,122 @@ void main() {
     // }
 
     uart_init(MYUBRR);
+
+    // while(1) {
+    //     printf("Troika");
+    //     _delay_ms(300);
+
+    // }
     
-    // uart_test();
+    //uart_test();
 
-    //EXERCISE 2
+    //!EXERCISE 2
 
-    //latch_init();
-
-    //led_test();
+    latch_init();
+    // led_test();
 
     
-
+    SRAM_init();
     //SRAM_test();
 
-    //EXERCISE 3
-
-    //joystick_test();
-
-    //adc_init();
-
-    //SRAM_init();
-
-    // while(1) {
-        
-        
-    //     pos_t joy_p = joystick_pos();
-    //     sliders_t sliders_p = sliders_pos();
-
-    //     Direction dir = joystick_dir();
-
-    //     //printf("Joystick dir: %d\n\r", dir);
-
-    //     // printf("Joystick_x: %d\n\r", joy_p.x);
-    //     // printf("Joystick_y: %d\n\r", joy_p.y);
-
-    //     // printf("Joystick_x: %d\n\r", joy_perc.x);
-    //     // printf("Joystick_y: %d\n\r", joy_perc.y);
-    //     printf("Sliders_left: %d\n\r", sliders_p.left);
-    //     printf("Sliders_right: %d\n\r", sliders_p.right);
-    //     // printf("Value_x: %d\n\r", pos.x);
-    //     // printf("Value_y: %d\n\r", pos.y);
-
-    //     _delay_ms(1000);
-    // }
-
-    //EXERCISE 4
-
-    // DDRB &= ~(1 << PB2); 
-    // PORTB |= (1 << PB2); // Set pull-up resistor
-
-    // while(1) {
-    //     uint8_t i = joystick_button();
-    //     printf("Button: %d\n\r", i);
-    //     _delay_ms(1000);
-
-    // }
-
-    OLED_init();
-    //OLED_reset();
-
-    // oled_c[0] = 0xb0;
-    // oled_c[0] = 0x00;
-    // oled_c[0] = 0x10;
-
-    // write_c(0xb0);
-    // write_c(0x00);
-    // write_c(0x10);
-
-    for(int i = 0; i < 8; i++) {
-        oled_c[0] = (0xb0 + i);
-        oled_c[0] = (0x00);
-        oled_c[0] = (0x10);
-
-        for(int j = 0; j < 128; j++) {
-            oled_d[0] = (0b11111111);
-        }
-    }
-
-    while(1) {
-        
-        
-        //write_d(0b11111111);
-        // _delay_ms(1000);
-    }
-
-    // while(1) {
+    // while (1)
+    // {
     //     address_decoder_test();
     // }
+    
 
-    //oled_c[0] = 0xb0;
-    //oled_c[0] = 0x00;
-    //oled_c[0] = 0x10;
+    //!EXERCISE 3
+    //PB0 and PB1 are used for touch buttons
+    DDRB &= ~(1 << PB2); 
+    PORTB |= (1 << PB2); // Set pull-up resistor, joystick button
+
+    //init touch button pins?
+    // DDRB &= ~(1 << PB3); 
+    // PORTB |= (1 << PB3);
+
+    // DDRB &= ~(1 << PB1); 
+    // PORTB |= (1 << PB1)    OLED_print_arrow(0, 40);; 
+
+
+
+    adc_init();
+
+
+    // while(1) {
+        
+    //     pos_t joy_p = joystick_pos();
+    //     pos_t joy_perc = joystick_percent();
+    //     Direction dir = joystick_dir();
+    //     sliders_t sliders_p = sliders_pos();
+    //     sliders_t slide_perc = sliders_percent();
+    //     uint8_t button = joystick_button();
+    //     touch_buttons buttons = touch_button();
+    //     uint8_t touch_left = left_touch_button();
+    //     uint8_t touch_right = right_touch_button();
+        
+
+        //printf("Joystick_x: %d\n\r", joy_p.x);
+        //printf("Joystick_y: %d\n\r", joy_p.y);
+
+        // printf("Joystick_x: %d\n\r", joy_perc.x);
+        // printf("Joystick_y: %d\n\r", joy_perc.y);
+
+        //printf("Joystick dir: %d\n\r", dir);
+
+        //printf("Sliders_left: %d\n\r", sliders_p.left);
+        //printf("Sliders_right: %d\n\r", sliders_p.right);
+
+        //printf("Sliders_left_perc: %d\n\r", slide_perc.left);
+        //printf("Sliders_right_perc: %d\n\r", slide_perc.right);
+        
+        //printf("Joystick button: %d\n\r", button);
+
+        // printf("Left touch button: %d\n\r", buttons.left);
+        // printf("Right touch button: %d\n\r", buttons.right);
+
+        //printf("Left touch button: %d\n\r", touch_left);
+        //printf("Right touch button: %d\n\n", touch_right);
+
+    //     _delay_ms(1000);
+    // }
+
+    //!EXERCISE 4
+
+    OLED_init();
+
+    OLED_reset();
 
     //OLED_print_arrow(0, 10);
 
-    //print port a in binary
-    //while(1) {
-        //oled_d[0] = (0b11111111);
-        //write_d(0b11111111);
+    //OLED_pos(7, 0);
+    //OLED_print_char('b');
 
-        // printf("PORTA: ");
-        // print_binary(PINA);
-        // printf("\n\r");
-        // _delay_ms(1000);
-    //}
+    OLED_create_menu();
+
+    int menu_item = OLED_navigate_menu();
+
+    switch(menu_item) {
+        case 0:
+            OLED_reset();
+            OLED_print_char('a');
+            break;
+        case 1:
+            OLED_reset();
+            OLED_print_char('a');
+            break;
+        case 2:
+            OLED_reset();
+            OLED_print_char('b');
+            break;
+        case 3:
+            OLED_reset();
+            OLED_print_char('c');
+            break;
+        default:
+            OLED_reset();
+            OLED_print_char('k');
+            break;
+    } 
 
 };
 
