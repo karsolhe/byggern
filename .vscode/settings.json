@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "fonts.h": "c",
-        "address_decoder.h": "c"
+        "address_decoder.h": "c",
+        "mcp2515.h": "c"
     }
 }
