@@ -6,6 +6,7 @@
 #include "adc.h"
 #include "oled.h"
 #include "menu.h"
+#include "can.h"
 #define F_CPU 4915200 
 
 
@@ -27,11 +28,11 @@ void main() {
 
     uart_init(MYUBRR);
 
-    // while(1) {
-    //     printf("Troika");
-    //     _delay_ms(300);
+    while(1) {
+        printf("Troika");
+        _delay_ms(300);
 
-    // }
+    }
     
     //uart_test();
 
@@ -80,8 +81,8 @@ void main() {
     //     uint8_t touch_right = right_touch_button();
         
 
-        //printf("Joystick_x: %d\n\r", joy_p.x);
-        //printf("Joystick_y: %d\n\r", joy_p.y);
+    //     printf("Joystick_x: %d\n\r", joy_p.x);
+    //     printf("Joystick_y: %d\n\r", joy_p.y);
 
         // printf("Joystick_x: %d\n\r", joy_perc.x);
         // printf("Joystick_y: %d\n\r", joy_perc.y);
@@ -103,7 +104,7 @@ void main() {
         //printf("Right touch button: %d\n\n", touch_right);
 
     //     _delay_ms(1000);
-    // }
+    //}
 
     //!EXERCISE 4
 
@@ -147,7 +148,32 @@ void main() {
 
     //!EXERCISE 5
 
+    // printf("Starting test...");
+    // CAN_init();
 
+    // //kanskje config ting
+
+    // mcp_set_mode(MODE_LOOPBACK);
+    // uint8_t mode = mcp_check_mode();
+    // printf(mode);
+
+    
+    // CAN_message message = {};
+    // message.ID = 0b00000000000;
+    // message.length = 8;
+    // for (int i; i < message.length; i++) {
+    //     message.data[i] = 0b10101010;
+    // }
+
+    
+
+    // CAN_send(0, &message);
+
+    // CAN_message recieved_message= CAN_recieve();
+
+    //  for (int i; i < recieved_message.length; i++) {
+    //     printf(recieved_message.data[i]);
+    // }
     
 };
 

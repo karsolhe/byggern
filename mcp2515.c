@@ -1,10 +1,11 @@
 #include "mcp2515.h"
+#include <util/delay.h>
 
 
-
-void mcp_init() {
+void mcp_init( ) {
     spi_master_init();
     mcp_reset();
+    _delay_ms(1);
 }
 
 
@@ -44,7 +45,7 @@ void mcp_request_to_send(uint8_t transmitBuffer) {
             break;
     }
     spi_transmit(data);
-    spi_slave_unselect():
+    spi_slave_unselect();
 }
 
 uint8_t mcp_read_status() {
@@ -66,8 +67,8 @@ void mcp_bit_modify(uint8_t address, uint8_t data, uint8_t mask) {
 
 void mcp_reset() {
     spi_slave_select();
-    spi_transmit();
-    spi_slave_unselect():
+    spi_transmit(MCP_RESET);
+    spi_slave_unselect();
 }
 
 void mcp_set_mode(uint8_t mode) {
@@ -97,5 +98,5 @@ void mcp_set_mode(uint8_t mode) {
 
 uint8_t mcp_check_mode() {
     uint8_t canstat = mcp_read(MCP_CANSTAT);
-    return (canstat & MODE_MASK)
+    return (canstat & MODE_MASK);
 }

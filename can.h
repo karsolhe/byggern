@@ -6,8 +6,8 @@ typedef struct CAN_Message {
     char data[8];
 } CAN_message, *CAN_message_ptr;
 
-void CAN_init(uint8_t mode);
+void CAN_init();
 
-void CAN_send(uint8_t transmitBuffer, uint8_t address, uint8_t data);
+void CAN_send(uint8_t transmitBuffer, CAN_message_ptr message);
 
 CAN_message CAN_recieve();

@@ -34,4 +34,3 @@ uint8_t spi_recieve() {
     return SPDR;
 }
 
-uint8_t spi_r
