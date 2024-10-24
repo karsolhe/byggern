@@ -72,28 +72,28 @@ void mcp_reset() {
 }
 
 void mcp_set_mode(uint8_t mode) {
-    uint8_t bits_to_set;
+    uint8_t bits_to_set = 0x00;
     switch (mode)
     {
-    case MODE_NORMAL:
+    case 0x00: //NORMAL
         bits_to_set = 0b00000000;
         break;
-    case MODE_SLEEP:
+    case 0x20: //SLEEP
         bits_to_set = 0b00100000;
         break;
-    case MODE_LOOPBACK:
+    case 0x40: //LOOPBACK
         bits_to_set = 0b01000000;
         break;
-    case MODE_LISTENONLY:
+    case 0x60: //LISTENONLY
         bits_to_set = 0b01100000;
         break;
-    case MODE_CONFIG:
+    case 0x80:
         bits_to_set = 0b10000000;
         break;
     default:
         break;
     }
-    mcp_bit_modify(MCP_CANCTRL, MODE_MASK, bits_to_set);
+    mcp_bit_modify(MCP_CANCTRL,  bits_to_set, MODE_MASK);
 }
 
 uint8_t mcp_check_mode() {

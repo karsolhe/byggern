@@ -14,6 +14,10 @@ void OLED_create_menu() {
     OLED_print_string("Tab 3");
     OLED_pos(3, 60);
     OLED_print_string("Tab 4");
+    OLED_pos(4, 60);
+    OLED_print_string("Tab 5");
+    OLED_pos(5, 60);
+    OLED_print_string("Tab 6");
 };
 
 int OLED_navigate_menu() {

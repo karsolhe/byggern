@@ -116,4 +116,4 @@ void OLED_init() {
     write_c(0xa4); //out follows RAM content
     write_c(0xa6); //set normal display
     write_c(0xaf); // display on 
-}
+};

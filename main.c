@@ -7,6 +7,7 @@
 #include "oled.h"
 #include "menu.h"
 #include "can.h"
+
 #define F_CPU 4915200 
 
 
@@ -28,11 +29,11 @@ void main() {
 
     uart_init(MYUBRR);
 
-    while(1) {
-        printf("Troika");
-        _delay_ms(300);
+    // while(1) {
+    //     printf("Troika");
+    //     _delay_ms(300);
 
-    }
+    // }
     
     //uart_test();
 
@@ -95,7 +96,7 @@ void main() {
         //printf("Sliders_left_perc: %d\n\r", slide_perc.left);
         //printf("Sliders_right_perc: %d\n\r", slide_perc.right);
         
-        //printf("Joystick button: %d\n\r", button);
+        ////printf("Joystick button: %d\n\r", button);
 
         // printf("Left touch button: %d\n\r", buttons.left);
         // printf("Right touch button: %d\n\r", buttons.right);
@@ -117,63 +118,84 @@ void main() {
     //OLED_pos(7, 0);
     //OLED_print_char('b');
 
-    OLED_create_menu();
+    // OLED_create_menu();
 
-    int menu_item = OLED_navigate_menu();
+    // int menu_item = OLED_navigate_menu();
 
-    switch(menu_item) {
-        case 0:
-            OLED_reset();
-            OLED_print_char('a');
-            break;
-        case 1:
-            OLED_reset();
-            OLED_print_char('a');
-            break;
-        case 2:
-            OLED_reset();
-            OLED_print_char('b');
-            break;
-        case 3:
-            OLED_reset();
-            OLED_print_char('c');
-            break;
-        default:
-            OLED_reset();
-            OLED_print_char('k');
-            break;
-    } 
+    // switch(menu_item) {
+    //     case 0:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("Troika");
+    //         break;
+    //     case 1:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("Japp");
+    //         break;
+    //     case 2:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("Snickers");
+    //         break;
+    //     case 3:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("Bounty");
+    //         break;
+    //     case 4:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("Mars");
+    //         break;
+    //     case 5:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("Melkerull");
+    //         break;
+    //     default:
+    //         OLED_reset();
+    //         OLED_pos(3, 0);
+    //         OLED_print_string("This is not a menu item..");
+    //         break;
+    // } 
 
 
 
     //!EXERCISE 5
 
-    // printf("Starting test...");
-    // CAN_init();
+    printf("Starting test... \r\n");
 
-    // //kanskje config ting
+    CAN_init();
 
-    // mcp_set_mode(MODE_LOOPBACK);
-    // uint8_t mode = mcp_check_mode();
-    // printf(mode);
+    mcp_set_mode(MODE_LOOPBACK);
 
-    
-    // CAN_message message = {};
-    // message.ID = 0b00000000000;
-    // message.length = 8;
-    // for (int i; i < message.length; i++) {
-    //     message.data[i] = 0b10101010;
-    // }
+   
+    printf("Mode is set \r\n");
 
-    
+    uint8_t mode = mcp_check_mode();
+    printf("mode: %d\r\n", (mode));
 
-    // CAN_send(0, &message);
+    CAN_message message = {
+        1,
+        8,
+        "Troika"
+    };
 
-    // CAN_message recieved_message= CAN_recieve();
+    CAN_send(&message);
 
-    //  for (int i; i < recieved_message.length; i++) {
-    //     printf(recieved_message.data[i]);
-    // }
-    
+    CAN_message recieved_message = CAN_recieve();
+
+    printf("Mottat melding:\r\n");
+    printf("ID: %d\r\n", recieved_message.ID);
+    printf("Length: %d\r\n", recieved_message.length);
+
+    printf("Data: %s\r\n", recieved_message.data);
+
+    //! EXERCISE 6
+
+   
 };
+
+
 
