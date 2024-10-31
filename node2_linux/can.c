@@ -6,12 +6,12 @@
 void can_printmsg(CanMsg m){
     printf("CanMsg(id:%d, length:%d, data:{", m.id, m.length);
     if(m.length){
-        printf("%d", m.byte[0]);
+        printf("%c", m.byte[0]);
     }
     for(uint8_t i = 1; i < m.length; i++){
-        printf(", %d", m.byte[i]);
+        printf(", %c", m.byte[i]);
     }
-    printf("})\n");
+    printf("})\n\r");
 }
 
 
@@ -111,15 +111,15 @@ uint8_t can_rx(CanMsg* m){
     
 
     
-/*
+
 // Example CAN interrupt handler
 void CAN0_Handler(void){
     char can_sr = CAN0->CAN_SR; 
-    
+    printf("Interrupt happened\n\r");
     // RX interrupt
-    if(can_sr & (1 << rxMailbox)){
-        // Add your message-handling code here
-        can_printmsg(can_rx());
+    if(can_sr & (1 << rxMailbox)){ 
+
+        handle_message();
     } else {
         printf("CAN0 message arrived in non-used mailbox\n\r");
     }
@@ -131,5 +131,15 @@ void CAN0_Handler(void){
     
     NVIC_ClearPendingIRQ(ID_CAN0);
 } 
-*/
 
+void handle_message() {
+    CanMsg m = (CanMsg) {};
+    uint8_t success = can_rx(&m);
+    if (success == 1) {
+        can_printmsg(m);
+    } else {
+        printf(":(");
+    }
+        
+    return;
+}

@@ -71,41 +71,41 @@ void main() {
 
     // while(1) {
         
-    //     pos_t joy_p = joystick_pos();
-    //     pos_t joy_perc = joystick_percent();
-    //     Direction dir = joystick_dir();
-    //     sliders_t sliders_p = sliders_pos();
-    //     sliders_t slide_perc = sliders_percent();
-    //     uint8_t button = joystick_button();
-    //     touch_buttons buttons = touch_button();
-    //     uint8_t touch_left = left_touch_button();
-    //     uint8_t touch_right = right_touch_button();
+        // pos_t joy_p = joystick_pos();
+        // pos_t joy_perc = joystick_percent();
+        // Direction dir = joystick_dir();
+        // sliders_t sliders_p = sliders_pos();
+        // sliders_t slide_perc = sliders_percent();
+        // uint8_t button = joystick_button();
+        // touch_buttons buttons = touch_button();
+        // uint8_t touch_left = left_touch_button();
+        // uint8_t touch_right = right_touch_button();
         
 
-    //     printf("Joystick_x: %d\n\r", joy_p.x);
-    //     printf("Joystick_y: %d\n\r", joy_p.y);
+        // printf("Joystick_x: %d\n\r", joy_p.x);
+        // printf("Joystick_y: %d\n\r", joy_p.y);
 
         // printf("Joystick_x: %d\n\r", joy_perc.x);
         // printf("Joystick_y: %d\n\r", joy_perc.y);
 
-        //printf("Joystick dir: %d\n\r", dir);
+        // printf("Joystick dir: %d\n\r", dir);
 
-        //printf("Sliders_left: %d\n\r", sliders_p.left);
-        //printf("Sliders_right: %d\n\r", sliders_p.right);
+        // printf("Sliders_left: %d\n\r", sliders_p.left);
+        // printf("Sliders_right: %d\n\r", sliders_p.right);
 
-        //printf("Sliders_left_perc: %d\n\r", slide_perc.left);
-        //printf("Sliders_right_perc: %d\n\r", slide_perc.right);
+        // printf("Sliders_left_perc: %d\n\r", slide_perc.left);
+        // printf("Sliders_right_perc: %d\n\r", slide_perc.right);
         
-        ////printf("Joystick button: %d\n\r", button);
+        //printf("Joystick button: %d\n\r", button);
 
         // printf("Left touch button: %d\n\r", buttons.left);
         // printf("Right touch button: %d\n\r", buttons.right);
 
-        //printf("Left touch button: %d\n\r", touch_left);
-        //printf("Right touch button: %d\n\n", touch_right);
+        // printf("Left touch button: %d\n\r", touch_left);
+        // printf("Right touch button: %d\n\n", touch_right);
 
     //     _delay_ms(1000);
-    //}
+    // }
 
     //!EXERCISE 4
 
@@ -164,17 +164,42 @@ void main() {
 
     //!EXERCISE 5
 
-    printf("Starting test... \r\n");
+    //printf("Starting test... \r\n");
 
     CAN_init();
 
-    mcp_set_mode(MODE_LOOPBACK);
+
+    // mcp_set_mode(MODE_LOOPBACK);
 
    
-    printf("Mode is set \r\n");
+    // printf("Mode is set \r\n");
 
-    uint8_t mode = mcp_check_mode();
-    printf("mode: %d\r\n", (mode));
+    // uint8_t mode = mcp_check_mode();
+    // printf("mode: %d\r\n", (mode));
+
+    // CAN_message message = {
+    //     1,
+    //     8,
+    //     "Troika"
+    // };
+
+    // CAN_send(&message);
+
+    // CAN_message recieved_message = CAN_recieve();
+
+    // printf("Mottat melding:\r\n");
+    // printf("ID: %d\r\n", recieved_message.ID);
+    // printf("Length: %d\r\n", recieved_message.length);
+
+    // printf("Data: %s\r\n", recieved_message.data);
+
+    //! EXERCISE 6
+
+    //må sette controlleren i config mode, og så endre på alle cnf registerene i riktig rekkefølge
+
+    mcp_timing();
+
+    mcp_set_mode(MODE_NORMAL);
 
     CAN_message message = {
         1,
@@ -182,19 +207,18 @@ void main() {
         "Troika"
     };
 
-    CAN_send(&message);
+   
+     
 
-    CAN_message recieved_message = CAN_recieve();
+    CAN_message m = CAN_recieve();
+
 
     printf("Mottat melding:\r\n");
-    printf("ID: %d\r\n", recieved_message.ID);
-    printf("Length: %d\r\n", recieved_message.length);
+    printf("ID: %d\r\n", m.ID);
+    printf("Length: %d\r\n", m.length);
 
-    printf("Data: %s\r\n", recieved_message.data);
-
-    //! EXERCISE 6
-
-   
+    printf("Data: %s\r\n", m.data);
+       
 };
 
 

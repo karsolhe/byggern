@@ -33,4 +33,6 @@ uint8_t uart_rx(uint8_t* val);
 //    }
 int uart_flush(char* buf, int len);
 
+
+void set_pin_test();
    

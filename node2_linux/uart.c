@@ -175,4 +175,29 @@ int _read(int file, char* ptr, int len){
 }
 
 
-   
+void set_pin_test() {
+    printf("Starting program... \n\r");
+    PIOB->PIO_WPMR = 0x50494F00; // Disable write protect by clearing the WPEN bit and setting correct key    
+
+    //? read status av register som sjekker dette
+    printf("Write protect status: %d\n\r", PIOB->PIO_WPSR);
+
+    
+    PIOB->PIO_PDR |= (1 << 13); //Disables the PIO from controlling the corresponding pin (enables peripheral control of the pin)
+    PIOB->PIO_PER |= (1 << 13); // Enables the PIO to control the corresponding pin (disables peripheral control of the pin)
+    
+    //? read status her med PIO_PSR
+    printf("Pheripheral control(1): %d\n\r", PIOB->PIO_PSR & (1 << 13));
+
+    PIOB->PIO_OER |= (1 << 13); // Enable output on pin
+
+    //? sjekke status her også med PIO_OSR
+    printf("Output enable(1): %d\n\r", PIOB->PIO_OSR & (1 << 13));
+
+    
+    //PIOB->PIO_SODR |= (1 << 13); // Sets the data to be driven on the I/O line
+    PIOB->PIO_CODR |= (1 << 13); // clear pin 13
+    
+
+    printf("Write protect status: %d\n\r", PIOB->PIO_WPSR);
+}

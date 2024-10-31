@@ -8,6 +8,13 @@ void mcp_init( ) {
     _delay_ms(1);
 }
 
+void mcp_timing() {
+    mcp_set_mode(MODE_CONFIG);
+    mcp_write(MCP_CNF1, 0b11000011); //Synchronization Jump Width Length 11 and baud rate prescaler = 3
+    mcp_write(MCP_CNF2, 0b10011011); // set phase 3 in CNF3, sample once, PS1 length, propagation segment length
+    mcp_write(MCP_CNF3, 0b00000011); //last three bits set PS2 length
+}
+
 
 uint8_t mcp_read(uint8_t address) {
     spi_slave_select();

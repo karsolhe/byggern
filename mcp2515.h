@@ -181,6 +181,7 @@
 
 void mcp_init();
 
+void mcp_timing();
 
 uint8_t mcp_read(uint8_t address);
 
