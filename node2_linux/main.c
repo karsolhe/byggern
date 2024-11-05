@@ -42,8 +42,6 @@ int main()
     //Uncomment after including uart above
     uart_init(84000000, 9600);
     // printf("Hello World\n\r");
-   
-
     can_init((CanInit){.brp = 41, .smp = 0, .phase1 = 3, .phase2 = 3, .propag = 3, .sjw = 3}, 1);
 
     uint8_t data[4];
@@ -54,11 +52,22 @@ int main()
     data[3] = 'p';
 
 
-    CanMsg m_2 = (CanMsg) {.id = 0, .length = 4, .byte8 = data};
+    CanMsg m_2 = {
+        .id = 0x01,
+        .length = 4,
+        .byte = {data[0], data[1], data[2], data[3]}
+    };
+
+    while(1) {
+        
+        can_tx(m_2);
+        printf("Message sent\n\r");
+    }
+    
 
     
 
-    can_tx(m_2);
+    
 }
 
 

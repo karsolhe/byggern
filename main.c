@@ -168,12 +168,8 @@ void main() {
 
     CAN_init();
 
-
     // mcp_set_mode(MODE_LOOPBACK);
-
-   
     // printf("Mode is set \r\n");
-
     // uint8_t mode = mcp_check_mode();
     // printf("mode: %d\r\n", (mode));
 
@@ -184,13 +180,10 @@ void main() {
     // };
 
     // CAN_send(&message);
-
     // CAN_message recieved_message = CAN_recieve();
-
     // printf("Mottat melding:\r\n");
     // printf("ID: %d\r\n", recieved_message.ID);
     // printf("Length: %d\r\n", recieved_message.length);
-
     // printf("Data: %s\r\n", recieved_message.data);
 
     //! EXERCISE 6
@@ -198,26 +191,34 @@ void main() {
     //må sette controlleren i config mode, og så endre på alle cnf registerene i riktig rekkefølge
 
     mcp_timing();
-
+    mcp_write(MCP_RX_INT, 0b00000011); //Enables both receive buffers to generate an interrupt on message reception
     mcp_set_mode(MODE_NORMAL);
 
-    CAN_message message = {
-        1,
-        8,
-        "Troika"
-    };
+    uint8_t mode = mcp_check_mode();
+    printf("Mode: %d\r\n", mode);
 
-   
-     
+    // CAN_message message = {
+    //     1,
+    //     8,
+    //     "Troika"
+    // };
 
-    CAN_message m = CAN_recieve();
+    
+    while(1) {
 
 
-    printf("Mottat melding:\r\n");
-    printf("ID: %d\r\n", m.ID);
-    printf("Length: %d\r\n", m.length);
-
-    printf("Data: %s\r\n", m.data);
+        if(mcp_read(MCP_CANINTF) & 0b00000001) {
+            CAN_message m = CAN_recieve();
+            printf("Message recieved\r\n");
+            printf("ID: %d\r\n", m.ID);
+            printf("Length: %d\r\n", m.length);
+            printf("Data: %s\r\n", m.data);
+            mcp_write(MCP_CANINTF, 0b00000000);
+        }
+    
+    
+    }
+    
        
 };
 
