@@ -1,6 +1,7 @@
 #include "mcp2515.h"
 #include <stdio.h>
 
+
 typedef struct CAN_Message {
     uint8_t ID;
     uint8_t length;

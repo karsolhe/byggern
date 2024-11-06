@@ -40,7 +40,7 @@ void uart_init(uint32_t cpufreq, uint32_t baudrate){
     
     // Set UART pins (A8, A9) to use alternate function (this disables regular IO)
     PIOA->PIO_PDR   |=   PIO_PA8 | PIO_PA9;
-    // Set alternate function A (see tables 9-2, 34-2)
+    // Set alternate function A (see tables 9-2, 34-2), AB pheripheral select
     PIOA->PIO_ABSR  &= ~(PIO_PA8 | PIO_PA9);
     
     // Configure UART settings

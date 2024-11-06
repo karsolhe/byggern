@@ -68,11 +68,15 @@ void main() {
 
     adc_init();
 
+    joy_cal_pos cal_pos = {0, 0};
+    joystick_calibrate(&cal_pos);
+    printf("Calibrate x %d\n\r", cal_pos.x_offset);
+    printf("Calibrate y %d\n\r", cal_pos.y_offset);
 
-    // while(1) {
-        
-        // pos_t joy_p = joystick_pos();
-        // pos_t joy_perc = joystick_percent();
+
+    while(1) {
+        pos_t joy_p = joystick_pos(cal_pos);
+        pos_t joy_perc = joystick_percent(cal_pos);
         // Direction dir = joystick_dir();
         // sliders_t sliders_p = sliders_pos();
         // sliders_t slide_perc = sliders_percent();
@@ -80,13 +84,16 @@ void main() {
         // touch_buttons buttons = touch_button();
         // uint8_t touch_left = left_touch_button();
         // uint8_t touch_right = right_touch_button();
+
+        printf("adc_read: %d\n\r", (uint16_t)adc_read(0));
+        printf("adc_read: %d\n\r", (uint16_t)adc_read(1));
         
 
-        // printf("Joystick_x: %d\n\r", joy_p.x);
-        // printf("Joystick_y: %d\n\r", joy_p.y);
+        printf("Joystick_x: %d\n\r", joy_p.x);
+        printf("Joystick_y: %d\n\r", joy_p.y);
 
-        // printf("Joystick_x: %d\n\r", joy_perc.x);
-        // printf("Joystick_y: %d\n\r", joy_perc.y);
+        // printf("Joystick_x_perc: %d\n\r", joy_perc.x);
+        // printf("Joystick_y_perc: %d\n\r", joy_perc.y);
 
         // printf("Joystick dir: %d\n\r", dir);
 
@@ -96,7 +103,7 @@ void main() {
         // printf("Sliders_left_perc: %d\n\r", slide_perc.left);
         // printf("Sliders_right_perc: %d\n\r", slide_perc.right);
         
-        //printf("Joystick button: %d\n\r", button);
+        // printf("Joystick button: %d\n\r", button);
 
         // printf("Left touch button: %d\n\r", buttons.left);
         // printf("Right touch button: %d\n\r", buttons.right);
@@ -104,8 +111,8 @@ void main() {
         // printf("Left touch button: %d\n\r", touch_left);
         // printf("Right touch button: %d\n\n", touch_right);
 
-    //     _delay_ms(1000);
-    // }
+        _delay_ms(1000);
+    }
 
     //!EXERCISE 4
 
@@ -191,11 +198,13 @@ void main() {
     //må sette controlleren i config mode, og så endre på alle cnf registerene i riktig rekkefølge
 
     mcp_timing();
+    mcp_write(MCP_RXB0CTRL, 0b01100000); //Sets receive buffer 0 to receive all messages)
     mcp_write(MCP_RX_INT, 0b00000011); //Enables both receive buffers to generate an interrupt on message reception
     mcp_set_mode(MODE_NORMAL);
+    
 
-    uint8_t mode = mcp_check_mode();
-    printf("Mode: %d\r\n", mode);
+    // uint8_t mode = mcp_check_mode();
+    // //printf("Mode: %d\r\n", mode);
 
     // CAN_message message = {
     //     1,
@@ -203,22 +212,63 @@ void main() {
     //     "Troika"
     // };
 
-    
-    while(1) {
+    _delay_ms(1000);
+    printf("Starting loop\r\n");
 
+    // while(1) {
 
-        if(mcp_read(MCP_CANINTF) & 0b00000001) {
-            CAN_message m = CAN_recieve();
-            printf("Message recieved\r\n");
-            printf("ID: %d\r\n", m.ID);
-            printf("Length: %d\r\n", m.length);
-            printf("Data: %s\r\n", m.data);
-            mcp_write(MCP_CANINTF, 0b00000000);
-        }
+    // //     // CAN_send(&message);
+    // //     // _delay_ms(5000);
+
+    //     // if(mcp_read(MCP_CANINTF) & 0b00000001) { //
+    //     //     CAN_message m = CAN_recieve();
+    //     //     printf("Message recieved\r\n");
+    //     //     printf("ID: %d\r\n", m.ID);
+    //     //     printf("Length: %d\r\n", m.length);
+    //     //     printf("Data: %s\r\n", m.data);
+    //     //     mcp_write(MCP_CANINTF, 0b00000001);
+    //     // }
+
+    //     pos_t joy_p = joystick_pos(cal_pos);
+    //     pos_t joy_perc = joystick_percent(cal_pos);
+    //     Direction dir = joystick_dir();
+
+    //     char data[8] = {
+    //         joy_p.x,
+    //         joy_p.y
+    //     };
+
+    //     char data2[8] = {
+    //         joy_perc.x,
+    //         joy_perc.y
+    //     };
+
+    //     CAN_message message ;
+
+    //     message.ID = 1;
+    //     message.length = 2;
+    //     message.data[0] = joy_p.x;
+    //     message.data[1] = joy_p.y;
+
+    //     // CAN_message message2 = {
+    //     //     2,
+    //     //     2,
+    //     //     data2
+    //     // };
+
+    //     CAN_message message2;
+
+    //     message2.ID = 2;
+    //     message2.length = 2;
+    //     message2.data[0] = joy_perc.x;
+    //     message2.data[1] = joy_perc.y;
+
+    //     CAN_send(&message);
+    //     _delay_ms(100);
+    //     CAN_send(&message2);
+    //     _delay_ms(100);
     
-    
-    }
-    
+    // }
        
 };
 

@@ -1,15 +1,16 @@
 
-#include "sam.h"
+
 #include "can.h"
 #include <stdio.h>
+
 
 void can_printmsg(CanMsg m){
     printf("CanMsg(id:%d, length:%d, data:{", m.id, m.length);
     if(m.length){
-        printf("%c", m.byte[0]);
+        printf("%d", m.byte[0]);
     }
     for(uint8_t i = 1; i < m.length; i++){
-        printf(", %c", m.byte[i]);
+        printf(", %d", m.byte[i]);
     }
     printf("})\n\r");
 }
@@ -18,6 +19,7 @@ void can_printmsg(CanMsg m){
 #define txMailbox 0
 #define rxMailbox 1
 
+CircularBuffer msgBuffer;
 
 void can_init(CanInit init, uint8_t rxInterrupt){
     // Disable CAN
@@ -118,8 +120,9 @@ void CAN0_Handler(void){
     printf("Interrupt happened\n\r");
     // RX interrupt
     if(can_sr & (1 << rxMailbox)){ 
-
-        handle_message();
+        CanMsg new_msg;
+        can_rx(&new_msg);
+        buffer_add(&new_msg);
     } else {
         printf("CAN0 message arrived in non-used mailbox\n\r");
     }
@@ -142,4 +145,37 @@ void handle_message() {
     }
         
     return;
+}
+
+void buffer_init(void) {
+    msgBuffer.head = 0;
+    msgBuffer.tail = 0;
+}
+
+bool buffer_add(const CanMsg *msg) {
+    uint32_t next = (msgBuffer.head + 1) % 5;
+    
+    if (next == msgBuffer.tail) {
+        return false;  // Buffer full
+    }
+    
+    msgBuffer.buffer[msgBuffer.head] = *msg;
+    msgBuffer.head = next;
+    
+    return true;
+}
+
+bool buffer_get(CanMsg *msg) {
+    if (msgBuffer.head == msgBuffer.tail) {
+        return false;  // Buffer empty
+    }
+    
+    *msg = msgBuffer.buffer[msgBuffer.tail];
+    msgBuffer.tail = (msgBuffer.tail + 1) % 5;
+    
+    return true;
+}
+
+bool buffer_is_empty(void) {
+    return msgBuffer.head == msgBuffer.tail;
 }

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "sam.h"
 
 // Struct with bit timing information
 // See `can_init` for usage example
@@ -29,6 +30,7 @@ __attribute__((packed)) struct CanInit {
 void can_init(CanInit init, uint8_t rxInterrupt);
 
 
+/*
 // Strict-aliasing-safe reinterpret-cast
 #define union_cast(type, x) \
     (((union { \
@@ -42,7 +44,7 @@ typedef struct Byte8 Byte8;
 struct Byte8 {
     uint8_t bytes[8];
 };
-
+*/
 
 // CAN message data type
 // Data fields have 3 access methods (via union):
@@ -69,6 +71,7 @@ struct Byte8 {
 //    };
 //    can_printmsg(m);
 //    // Should print: CanMsg(id:1, length:7, data:{10, 0, 20, 0, 0, 240, 193})
+
 typedef struct CanMsg CanMsg;
 struct CanMsg {
     uint8_t id;
@@ -76,9 +79,18 @@ struct CanMsg {
     union {
         uint8_t     byte[8];
         uint32_t    dword[2];
-        Byte8       byte8;
+        //Byte8       byte8;
     };    
 };
+
+
+typedef struct {
+    CanMsg buffer[5];
+    volatile uint32_t head;  // Write index
+    volatile uint32_t tail;  // Read index
+} CircularBuffer;
+
+extern CircularBuffer msgBuffer;
 
 // Send a CAN message on the bus. 
 // Blocks if the bus does not receive the message (typically because one of the 
@@ -96,3 +108,11 @@ void can_printmsg(CanMsg m);
 void handle_message();
 
 
+
+
+void buffer_init(void);
+// Add message to buffer - called from handler
+bool buffer_add(const CanMsg *msg);
+// Get message from buffer - called from main context
+bool buffer_get(CanMsg *msg);
+bool buffer_is_empty(void);
