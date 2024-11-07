@@ -2,7 +2,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "sam.h"
+#include "sam/sam3x/include/sam.h"
 
 // Struct with bit timing information
 // See `can_init` for usage example

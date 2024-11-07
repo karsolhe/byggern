@@ -3,6 +3,8 @@
 #include "sam/sam3x/include/sam.h"
 #include "sam/sam3x/source/system_sam3x.h"
 #include "can.h"
+#include "pwm.h"
+#include "ir.h"
 
 
 /*
@@ -20,7 +22,7 @@ int main()
 {
     SystemInit();
 
-    WDT->WDT_MR = WDT_MR_WDDIS; //Disable Watchdog Timer
+    WDT->WDT_MR = WDT_MR_WDDIS; //Disable Watchdog Timer 
 
     // PMC->PMC_WPMR = 0x504D400; //disables write protect for PMC
 
@@ -28,45 +30,75 @@ int main()
     // PMC->PMC_PCER1 |= (PMC_PCER1_PID43);
 
     // //? kan sjekke status
-
-    // PIOA->PIO_WPMR = 0x50494F00;
-
-    //PIOA->PIO_PDR |= PIO_PDR_P0; //Disables the PIO from controlling the corresponding pin (enables peripheral control of the pin)
-    // PIOA->PIO_PDR |= PIO_PDR_P1;
-
-    // PIOA->PIO_ABSR &= ~(1); //Assigns the I/O line to the Peripheral A function.
-    // PIOA->PIO_ABSR &= ~(1 << 1);
-
     
 
     //Uncomment after including uart above
     uart_init(84000000, 9600);
-    // printf("Hello World\n\r");
+    
+    printf("node 2 initializing\n\r");
+    
     can_init((CanInit){.brp = 41, .smp = 0, .phase1 = 3, .phase2 = 3, .propag = 3, .sjw = 3}, 1);
 
-    //uint8_t data[4];
+    uint8_t data[4];
 
-    // data[0] = 'J';
-    // data[1] = 'a';
-    // data[2] = 'p';
-    // data[3] = 'p';
+    data[0] = 'J';
+    data[1] = 'a';
+    data[2] = 'p';
+    data[3] = 'p';
 
 
-    // CanMsg m_2 = {
-    //     .id = 0x01,
-    //     .length = 4,
-    //     .byte = {data[0], data[1], data[2], data[3]}
-    // };
+    CanMsg m_2 = {
+        .id = 0x01,
+        .length = 4,
+        .byte = {data[0], data[1], data[2], data[3]}
+    };
+
+    pwm_init();
+    adc_init();
+   
+    
 
     while(1) {
+
         if(!buffer_is_empty()) {
             CanMsg m;
             buffer_get(&m);
-            can_printmsg(m);
+            uint8_t id = m.id;
+            printf("Slider message recieved \n\r");
+            pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
+            printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
+            // switch (id)
+            // {
+            // case 111:
+                
+            //     break;
+            // default:
+            //     break;
+            // }
+            
+            //can_printmsg(m);
         }
 
-        // can_tx(m_2);
-        // printf("Message sent\n\r");
+        uint16_t data = adc_ir_read();
+        printf("adc value: %d\n\r", data);
+
+        // double test_0 = pwm_percent_to_duty_cycle(0);
+        // double test_50 = pwm_percent_to_duty_cycle(50);
+        // double test_100 = pwm_percent_to_duty_cycle(100);
+        // printf("Percent to DC test: %f\n\r", test_0);
+        // printf("Percent to DC test: %f\n\r", test_50); 
+        // printf("Percent to DC test: %f\n\r", test_100);
+        
+        // pwm_duty_cycle_update(0.0001);
+
+        // for(int i = 0; i < 10000; i++) {};
+
+        // pwm_duty_cycle_update(0.0002);
+
+        // for(int i = 0; i < 10000; i++) {};
+
+        //can_tx(m_2);
+        //printf("Message sent\n\r");
         
     }
     

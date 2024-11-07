@@ -13,6 +13,7 @@ SOURCE_FILES = \
 		can.c \
 		pwm.c \
 		servo.c \
+		ir.c \
 
 # Feel free to ignore anything below this line
 VPATH:= $(dir $(SOURCE_FILES))

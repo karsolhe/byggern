@@ -117,7 +117,6 @@ uint8_t can_rx(CanMsg* m){
 // Example CAN interrupt handler
 void CAN0_Handler(void){
     char can_sr = CAN0->CAN_SR; 
-    printf("Interrupt happened\n\r");
     // RX interrupt
     if(can_sr & (1 << rxMailbox)){ 
         CanMsg new_msg;

@@ -1,4 +1,4 @@
-build/can.o: can.c can.h sam/sam3x/include/sam.h \
+build/pwm.o: pwm.c pwm.h sam/sam3x/include/sam.h \
  sam/sam3x/include/sam3x8e.h sam/cmsis/core_cm3.h \
  sam/cmsis/cmsis_version.h sam/cmsis/cmsis_compiler.h \
  sam/cmsis/cmsis_gcc.h sam/cmsis/mpu_armv7.h \
@@ -72,4 +72,6 @@ build/can.o: can.c can.h sam/sam3x/include/sam.h \
  sam/sam3x/include/instance/instance_wdt.h \
  sam/sam3x/include/instance/instance_rtc.h \
  sam/sam3x/include/instance/instance_gpbr.h \
- sam/sam3x/include/pio/pio_sam3x8e.h
+ sam/sam3x/include/pio/pio_sam3x8e.h \
+ sam/sam3x/include/component/component_pwm.h \
+ sam/sam3x/include/component/component_pio.h

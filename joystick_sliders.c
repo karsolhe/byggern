@@ -16,8 +16,11 @@ pos_t joystick_pos(joy_cal_pos cal_pos) {
 
 pos_t joystick_percent(joy_cal_pos cal_pos) {
     pos_t pos = joystick_pos(cal_pos);
-    pos.x = (pos.x * 100) / 255;
-    pos.y = (pos.y * 100) / 255;
+    //pos.x = (pos.x * 100) / 255;
+    //pos.y = (pos.y * 100) / 255;
+
+    pos.x = ((pos.x - cal_pos.x_offset) * 100) / (255 - cal_pos.x_offset);
+    pos.y = ((pos.y - cal_pos.y_offset) * 100) / (255 - cal_pos.y_offset);
 
     return pos;
 }
