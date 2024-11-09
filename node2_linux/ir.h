@@ -1,9 +1,7 @@
-#include <stdint.h>
-#include "sam/sam3x/include/sam.h"
-#include "sam/sam3x/include/component/component_pwm.h"
-#include <stdio.h>
+#include "adc.h"
+#include "time.h"
 
-void adc_init();
+uint8_t ir_read();
 
-uint16_t adc_ir_read();
+void ir_point_counter(int *hp);
 

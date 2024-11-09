@@ -134,17 +134,7 @@ void CAN0_Handler(void){
     NVIC_ClearPendingIRQ(ID_CAN0);
 } 
 
-void handle_message() {
-    CanMsg m = (CanMsg) {};
-    uint8_t success = can_rx(&m);
-    if (success == 1) {
-        can_printmsg(m);
-    } else {
-        printf(":(");
-    }
-        
-    return;
-}
+
 
 void buffer_init(void) {
     msgBuffer.head = 0;

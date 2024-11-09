@@ -1,23 +1,17 @@
 #include "ir.h"
 
 
+uint8_t ir_read() {
+    uint16_t adc = adc_ir_read();
+    if(adc < 2000) {
+        return 1;
+    } else {return 0;}
+};
 
-void adc_init() {
-    PMC->PMC_PCR = (ID_ADC << PMC_PCR_PID_Pos);
-    PMC->PMC_PCER1 = (1 << (ID_ADC -32)); // good
+void ir_point_counter(int *hp) {
+    if(ir_read() == 1) {
+        (*hp)--;
+        time_spinFor(msecs(80));
+    }
+};
 
-    ADC->ADC_MR = ADC_MR_FREERUN_ON;
-    ADC->ADC_MR = (0b11 << ADC_MR_PRESCAL_Pos);
-
-    ADC->ADC_CR = (1 << 1);
-
-    ADC->ADC_CHER = ADC_CHER_CH0;
-
-}
-
-
-uint16_t adc_ir_read() {
-    uint16_t data;
-    data = ADC->ADC_LCDR;
-    return data;
-}

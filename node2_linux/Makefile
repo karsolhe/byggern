@@ -14,6 +14,8 @@ SOURCE_FILES = \
 		pwm.c \
 		servo.c \
 		ir.c \
+		adc.c \
+		encoder.c \
 
 # Feel free to ignore anything below this line
 VPATH:= $(dir $(SOURCE_FILES))

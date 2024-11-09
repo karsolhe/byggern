@@ -2,6 +2,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "sam/sam3x/include/sam.h"
 
 // Struct with bit timing information
@@ -105,7 +106,6 @@ uint8_t can_rx(CanMsg* m);
 void can_printmsg(CanMsg m);
 
 
-void handle_message();
 
 
 

@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdarg.h>
+//#include <threads.h>
 #include "sam/sam3x/include/sam.h"
 #include "sam/sam3x/source/system_sam3x.h"
 #include "can.h"
 #include "pwm.h"
+#include "adc.h"
 #include "ir.h"
+#include "time.h"
+#include "encoder.h"
 
 
 /*
@@ -35,7 +39,6 @@ int main()
     //Uncomment after including uart above
     uart_init(84000000, 9600);
     
-    printf("node 2 initializing\n\r");
     
     can_init((CanInit){.brp = 41, .smp = 0, .phase1 = 3, .phase2 = 3, .propag = 3, .sjw = 3}, 1);
 
@@ -53,34 +56,49 @@ int main()
         .byte = {data[0], data[1], data[2], data[3]}
     };
 
-    pwm_init();
+    //pwm_init();
     adc_init();
-   
-    
 
+    encoder_init();
+    
+    int hp = 5;
+    time_spinFor(msecs(100));
     while(1) {
 
-        if(!buffer_is_empty()) {
-            CanMsg m;
-            buffer_get(&m);
-            uint8_t id = m.id;
-            printf("Slider message recieved \n\r");
-            pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
-            printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
-            // switch (id)
-            // {
-            // case 111:
-                
-            //     break;
-            // default:
-            //     break;
-            // }
-            
-            //can_printmsg(m);
-        }
+        
 
-        uint16_t data = adc_ir_read();
-        printf("adc value: %d\n\r", data);
+        // if(!buffer_is_empty()) {
+        //     CanMsg m;
+        //     buffer_get(&m);
+        //     uint8_t id = m.id;
+            
+        //     switch (id)
+        //     {
+        //     case 111:
+        //         printf("Slider message recieved \n\r");
+        //         pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
+        //         printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
+        //         break;
+        //     default:
+        //         break;
+        //     }
+            
+        //     //can_printmsg(m);
+        // }
+
+        // ADC read
+
+        //uint16_t adc_data = adc_ir_read();
+        //printf("adc value: %d\n\r", adc_data);
+
+        // ir_point_counter(&hp);
+
+        // printf("points: %d\n\r", hp);
+
+        // if(hp <= 0) {
+        //     printf("you lost \n\r");
+        //     break;
+        // }
 
         // double test_0 = pwm_percent_to_duty_cycle(0);
         // double test_50 = pwm_percent_to_duty_cycle(50);
@@ -99,6 +117,14 @@ int main()
 
         //can_tx(m_2);
         //printf("Message sent\n\r");
+
+        //!  EXERCISE 8
+        uint32_t encoder_value;
+        encoder_value = encoder_read();
+
+        printf("encoder %d\n\r", encoder_value);
+        time_spinFor(msecs(100));
+
         
     }
     
