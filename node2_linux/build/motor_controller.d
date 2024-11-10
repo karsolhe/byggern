@@ -1,5 +1,5 @@
-build/encoder.o: encoder.c encoder.h sam/sam3x/include/sam.h \
- sam/sam3x/include/sam3x8e.h sam/cmsis/core_cm3.h \
+build/motor_controller.o: motor_controller.c motor_controller.h \
+ sam/sam3x/include/sam.h sam/sam3x/include/sam3x8e.h sam/cmsis/core_cm3.h \
  sam/cmsis/cmsis_version.h sam/cmsis/cmsis_compiler.h \
  sam/cmsis/cmsis_gcc.h sam/cmsis/mpu_armv7.h \
  sam/sam3x/source/system_sam3x.h sam/compiler.h sam/parts.h \
@@ -73,5 +73,6 @@ build/encoder.o: encoder.c encoder.h sam/sam3x/include/sam.h \
  sam/sam3x/include/instance/instance_rtc.h \
  sam/sam3x/include/instance/instance_gpbr.h \
  sam/sam3x/include/pio/pio_sam3x8e.h \
- sam/sam3x/include/component/component_pio.h \
- sam/sam3x/include/component/component_tc.h sam/sam3x/include/sam.h
+ sam/sam3x/include/component/component_pio.h encoder.h \
+ sam/sam3x/include/component/component_tc.h sam/sam3x/include/sam.h \
+ motor_driver.h

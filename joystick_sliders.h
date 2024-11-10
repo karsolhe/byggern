@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <avr/io.h>
 
 typedef enum Direction {
     LEFT,
@@ -28,9 +30,9 @@ typedef struct touch_buttons{
 } touch_buttons;
 
 
-void joystick_calibrate(joy_cal_pos *cal_pos);
+//void joystick_calibrate(joy_cal_pos *cal_pos);
 
-enum Direction joystick_dir(joy_cal_pos cal_pos);
+enum Direction joystick_dir();
 
 uint8_t joystick_button();
 
@@ -44,6 +46,6 @@ sliders_t sliders_pos();
 
 sliders_t sliders_percent();
 
-pos_t joystick_pos(joy_cal_pos cal_pos);
+pos_t joystick_pos();
 
-pos_t joystick_percent(joy_cal_pos cal_pos);
+pos_t joystick_percent();

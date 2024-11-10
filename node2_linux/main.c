@@ -9,6 +9,8 @@
 #include "ir.h"
 #include "time.h"
 #include "encoder.h"
+#include "motor_driver.h"
+#include "motor_controller.h"
 
 
 /*
@@ -28,63 +30,67 @@ int main()
 
     WDT->WDT_MR = WDT_MR_WDDIS; //Disable Watchdog Timer 
 
-    // PMC->PMC_WPMR = 0x504D400; //disables write protect for PMC
-
-    // PMC->PMC_PCER1 |= (PMC_PCER1_PID44); //Enables the corresponding peripheral clock.
-    // PMC->PMC_PCER1 |= (PMC_PCER1_PID43);
-
-    // //? kan sjekke status
-    
-
     //Uncomment after including uart above
     uart_init(84000000, 9600);
     
-    
     can_init((CanInit){.brp = 41, .smp = 0, .phase1 = 3, .phase2 = 3, .propag = 3, .sjw = 3}, 1);
 
-    uint8_t data[4];
+    // uint8_t data[4];
 
-    data[0] = 'J';
-    data[1] = 'a';
-    data[2] = 'p';
-    data[3] = 'p';
+    // data[0] = 'J';
+    // data[1] = 'a';
+    // data[2] = 'p';
+    // data[3] = 'p';
 
 
-    CanMsg m_2 = {
-        .id = 0x01,
-        .length = 4,
-        .byte = {data[0], data[1], data[2], data[3]}
-    };
+    // CanMsg m_2 = {
+    //     .id = 0x01,
+    //     .length = 4,
+    //     .byte = {data[0], data[1], data[2], data[3]}
+    // };
 
-    //pwm_init();
+    pwm_init();
     adc_init();
 
     encoder_init();
     
     int hp = 5;
-    time_spinFor(msecs(100));
+    time_spinFor(msecs(10));
+
+    motor_driver_init();
+
+    int error_sum = 0;
+
     while(1) {
 
         
+        if(!buffer_is_empty()) {
+            CanMsg m;
+            buffer_get(&m);
+            uint8_t id = m.id;
+            
+            switch (id)
+            {
+            case 111:
+                //printf("Slider message recieved \n\r");
+                pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
+                //printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
+                break;
+            case 222:
+                motor_driver_dir(m.byte[1]);
+                //motor_driver_speed(m.byte[0]);
 
-        // if(!buffer_is_empty()) {
-        //     CanMsg m;
-        //     buffer_get(&m);
-        //     uint8_t id = m.id;
+                error_sum = motor_position_controller(m.byte[0], error_sum);
+
+
+                //pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));
+                break;
+            default:
+                break;
+            }
             
-        //     switch (id)
-        //     {
-        //     case 111:
-        //         printf("Slider message recieved \n\r");
-        //         pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
-        //         printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
-        //         break;
-        //     default:
-        //         break;
-        //     }
-            
-        //     //can_printmsg(m);
-        // }
+            //can_printmsg(m);
+        }
 
         // ADC read
 
@@ -99,41 +105,23 @@ int main()
         //     printf("you lost \n\r");
         //     break;
         // }
-
-        // double test_0 = pwm_percent_to_duty_cycle(0);
-        // double test_50 = pwm_percent_to_duty_cycle(50);
-        // double test_100 = pwm_percent_to_duty_cycle(100);
-        // printf("Percent to DC test: %f\n\r", test_0);
-        // printf("Percent to DC test: %f\n\r", test_50); 
-        // printf("Percent to DC test: %f\n\r", test_100);
-        
-        // pwm_duty_cycle_update(0.0001);
-
-        // for(int i = 0; i < 10000; i++) {};
-
-        // pwm_duty_cycle_update(0.0002);
-
-        // for(int i = 0; i < 10000; i++) {};
+      
 
         //can_tx(m_2);
         //printf("Message sent\n\r");
 
         //!  EXERCISE 8
         uint32_t encoder_value;
-        encoder_value = encoder_read();
+        encoder_value = encoder_read_ch0();
 
         printf("encoder %d\n\r", encoder_value);
         time_spinFor(msecs(100));
 
-        
     }
-    
 
     
 
     
 }
-
-
 
 

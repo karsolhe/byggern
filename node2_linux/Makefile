@@ -16,6 +16,8 @@ SOURCE_FILES = \
 		ir.c \
 		adc.c \
 		encoder.c \
+		motor_driver.c \
+		motor_controller.c \
 
 # Feel free to ignore anything below this line
 VPATH:= $(dir $(SOURCE_FILES))

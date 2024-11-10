@@ -1,26 +1,32 @@
-#include <avr/io.h>
+
 #include "joystick_sliders.h"
 #include "adc.h"
 
-void joystick_calibrate(joy_cal_pos *cal_pos) {
-    cal_pos->x_offset = 128 - adc_read(0);
-    cal_pos->y_offset = 128 - adc_read(1);
-}
+// void joystick_calibrate(joy_cal_pos *cal_pos) {
+//     cal_pos->x_offset = 128 - adc_read(0);
+//     cal_pos->y_offset = 128 - adc_read(1);
+// }
 
-pos_t joystick_pos(joy_cal_pos cal_pos) {
+pos_t joystick_pos() {
     pos_t pos = {0, 0};
     pos.x = adc_read(0);
     pos.y = adc_read(1);
     return pos;
 }
 
-pos_t joystick_percent(joy_cal_pos cal_pos) {
-    pos_t pos = joystick_pos(cal_pos);
-    //pos.x = (pos.x * 100) / 255;
-    //pos.y = (pos.y * 100) / 255;
+pos_t joystick_percent() {
+    pos_t pos = joystick_pos();
+    if(pos.x <= 125) {
+        pos.x = (-(125 -pos.x)  * 100) / 125;
+    } else if(pos.x > 125) {
+        pos.x = ((pos.x-125) * 100) / 125;
+    }
 
-    pos.x = ((pos.x - cal_pos.x_offset) * 100) / (255 - cal_pos.x_offset);
-    pos.y = ((pos.y - cal_pos.y_offset) * 100) / (255 - cal_pos.y_offset);
+    
+    pos.y = (pos.y * 100) / 255;
+
+    //pos.x = ((pos.x - cal_pos.x_offset) * 100) / (255 - cal_pos.x_offset);
+    //pos.y = ((pos.y - cal_pos.y_offset) * 100) / (255 - cal_pos.y_offset);
 
     return pos;
 }
@@ -45,10 +51,10 @@ uint8_t right_touch_button() {
 }
 
 
-Direction joystick_dir(joy_cal_pos cal_pos) {
+Direction joystick_dir() {
     Direction dir = NEUTRAL;
 
-    pos_t pos = joystick_pos(cal_pos);
+    pos_t pos = joystick_pos();
 
     if(pos.x < 100) {
         dir = LEFT;

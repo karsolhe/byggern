@@ -69,8 +69,8 @@ void main() {
 
     adc_init();
 
-     joy_cal_pos cal_pos = {0, 0};
-     joystick_calibrate(&cal_pos);
+    joy_cal_pos cal_pos = {0, 0};
+    //joystick_calibrate(&cal_pos);
     // printf("Calibrate x %d\n\r", cal_pos.x_offset);
     // printf("Calibrate y %d\n\r", cal_pos.y_offset);
 
@@ -196,9 +196,7 @@ void main() {
 
     //! EXERCISE 6
 
-    //må sette controlleren i config mode, og så endre på alle cnf registerene i riktig rekkefølge
-
-    mcp_timing();
+    mcp_timing(); //endrer på alle cnf registerene i riktig rekkefølge
     mcp_write(MCP_RXB0CTRL, 0b01100000); //Sets receive buffer 0 to receive all messages)
     mcp_write(MCP_RX_INT, 0b00000011); //Enables both receive buffers to generate an interrupt on message reception
     mcp_set_mode(MODE_NORMAL);
@@ -232,30 +230,26 @@ void main() {
 
         pos_t joy_p = joystick_pos(cal_pos);
         pos_t joy_perc = joystick_percent(cal_pos);
-
         sliders_t slide_perc = sliders_percent();
-
-        char data[8] = {
-            joy_p.x,
-            joy_p.y
-        };
+        uint8_t button = joystick_button();
+        Direction dir = joystick_dir();
+        
 
         char data2[8] = {
             joy_perc.x,
             joy_perc.y
         };
 
-        CAN_message message ;
-        message.ID = 1;
-        message.length = 2;
-        message.data[0] = joy_p.x;
-        message.data[1] = joy_p.y;
+        char data_dir[8] = {
+            dir
+        };
 
-        CAN_message message2;
-        message2.ID = 2;
-        message2.length = 2;
-        message2.data[0] = joy_perc.x;
-        message2.data[1] = joy_perc.y;
+
+        CAN_message m_joy_perc_x_dir;
+        m_joy_perc_x_dir.ID = 222;
+        m_joy_perc_x_dir.length = 2;
+        m_joy_perc_x_dir.data[0] = joy_perc.x;
+        m_joy_perc_x_dir.data[1] = data_dir[0];
 
         CAN_message sliders;
         sliders.ID = 111;
@@ -267,7 +261,7 @@ void main() {
         //_delay_ms(5);
         // CAN_send(&message);
         // _delay_ms(100);
-        // CAN_send(&message2);
+        CAN_send(&m_joy_perc_x_dir);
         _delay_ms(1);
 
         //printf("messages sent \n\r");

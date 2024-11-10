@@ -74,5 +74,6 @@ build/main.o: main.c sam/sam3x/include/sam.h sam/sam3x/include/sam3x8e.h \
  sam/sam3x/include/pio/pio_sam3x8e.h sam/sam3x/source/system_sam3x.h \
  can.h pwm.h sam/sam3x/include/component/component_pwm.h adc.h \
  sam/sam3x/include/component/component_adc.h ir.h time.h encoder.h \
- sam/sam3x/include/component/component_pio.h sam/sam3x/include/sam.h \
- uart.h
+ sam/sam3x/include/component/component_pio.h \
+ sam/sam3x/include/component/component_tc.h sam/sam3x/include/sam.h \
+ motor_driver.h motor_controller.h uart.h

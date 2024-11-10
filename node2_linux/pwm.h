@@ -13,4 +13,8 @@ void pwm_init();
 
 void pwm_duty_cycle_update(double duty_cycle);
 
+void pwm_duty_cycle_update_speed(double duty_cycle);
+
 double pwm_percent_to_duty_cycle(char data);
+
+double pwm_percent_to_duty_cycle_speed(char data);
