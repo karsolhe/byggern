@@ -78,20 +78,20 @@ void main() {
     // while(1) {
     //     pos_t joy_p = joystick_pos(cal_pos);
     //     pos_t joy_perc = joystick_percent(cal_pos);
-        // Direction dir = joystick_dir();
-        // sliders_t sliders_p = sliders_pos();
-        // sliders_t slide_perc = sliders_percent();
-        // uint8_t button = joystick_button();
-        // touch_buttons buttons = touch_button();
-        // uint8_t touch_left = left_touch_button();
-        // uint8_t touch_right = right_touch_button();
+    //     Direction dir = joystick_dir();
+    //     sliders_t sliders_p = sliders_pos();
+    //     sliders_t slide_perc = sliders_percent();
+    //     uint8_t button = joystick_button();
+    //     touch_buttons buttons = touch_button();
+    //     uint8_t touch_left = left_touch_button();
+    //     uint8_t touch_right = right_touch_button();
 
         // printf("adc_read: %d\n\r", (uint16_t)adc_read(0));
         // printf("adc_read: %d\n\r", (uint16_t)adc_read(1));
         
 
         //printf("Joystick_x: %d\n\r", joy_p.x);
-        //printf("Joystick_y: %d\n\r", joy_p.y);
+        // printf("Joystick_y: %d\n\r", joy_p.y);
 
         // printf("Joystick_x_perc: %d\n\r", joy_perc.x);
         // printf("Joystick_y_perc: %d\n\r", joy_perc.y);
@@ -101,7 +101,7 @@ void main() {
         // printf("Sliders_left: %d\n\r", sliders_p.left);
         // printf("Sliders_right: %d\n\r", sliders_p.right);
 
-        // printf("Sliders_left_perc: %d\n\r", slide_perc.left);
+        //printf("Sliders_left_perc: %d\n\r", slide_perc.left);
         // printf("Sliders_right_perc: %d\n\r", slide_perc.right);
         
         // printf("Joystick button: %d\n\r", button);
@@ -261,7 +261,8 @@ void main() {
         //_delay_ms(5);
         // CAN_send(&message);
         // _delay_ms(100);
-        CAN_send(&m_joy_perc_x_dir);
+        //CAN_send(&m_joy_perc_x_dir);
+        CAN_send(&sliders);
         _delay_ms(1);
 
         //printf("messages sent \n\r");

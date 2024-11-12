@@ -15,8 +15,8 @@ typedef struct {
 } joy_cal_pos;
 
 typedef struct pos_t{
-    int x;
-    int y;
+    uint16_t x;
+    uint16_t y;
 }pos_t;
 
 typedef struct sliders_t{

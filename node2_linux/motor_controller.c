@@ -1,45 +1,59 @@
 #include "motor_controller.h"
 #include "motor_driver.h"
 
-int motor_position_controller(char joy_percent, int error_sum) {
-    uint32_t encoder_value = encoder_read_ch0();
+Controller motor_position_controller(uint16_t pos_ref, int error_sum) {
+    uint32_t pos_measured = encoder_read_ch0();
     // if(encoder_value <= 0.0) {
     //     encoder_value = 0.0;
     // } else if(encoder_value >= 2800) {
     //     encoder_value = 2800;
     // }
-
-    double encoder_calib = (((double)encoder_value-1400) * 100) / 1400;
-
-    double error = (double)joy_percent - encoder_calib;
-
-
-    if(error >= 200) {
-        error = 200;
-    } else if(error <= -200) {
-        error = -200;
+    if(pos_measured > 2800) {
+        pos_measured = 2800;
+    } else if (pos_measured < 0) {
+        pos_measured = 0;
     }
+    
+    //double encoder_calib = (((double)encoder_value-1400) * 100) / 1400;
+    //double encoder_calib = (((double)encoder_value) * 100) / 2800;
 
-    //printf("encoder calib: %f\n\r", encoder_calib);
-    printf("error: %f\n\r", error);
+    double error = (double)pos_ref - pos_measured;
+
+    printf("Error %f\n\r", error);
+    //printf("pos_ref: %d\n\r", pos_ref);
+    //printf("pos_measured: %d\n\r", pos_measured);
+
+    //positiv e = høyre, negativ e = venstre
+    int dir = 1;
+    if (error <= 0) {
+        dir = 0;
+    } else if(error > 0) {
+        dir = 1;
+    } else { }
+
+
+    if(fabs(error) < 100) {
+        error = 0;
+    } 
 
     error_sum = error_sum + error;
 
-    double K_p = 0.5;
-    double K_i = 0.001;
+    double K_p = 0.000005;
+    double K_i = 0.000001;
 
     double T = 0.001;
 
     uint8_t I = T * K_i * error_sum;
 
-    double u  = K_p * error + I; // max 100, min 0
+    double u;
 
-    if(u > 100) {
-        u = 100;
-    } else if(u < 0) {
+    if(error == 0) {
         u = 0;
-    }
+    } else {u  = K_p * fabs(error) + I;}
+     
 
-    motor_driver_speed(u);  //duty cycle
-    return error_sum;
+    printf("u: %f\n\r", u);
+
+    Controller c = {.u = u, .dir = dir, .error_sum = error_sum};
+    return c;
 }

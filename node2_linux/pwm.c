@@ -71,12 +71,12 @@ void pwm_duty_cycle_update(double duty_cycle) {
 }
 
 void pwm_duty_cycle_update_speed(double duty_cycle) {
-    //if(duty_cycle < 0.0009 || duty_cycle > 0.0021) {
-        //printf("Duty cycle ut of range \n\r");
-    //} else {
-        uint32_t cdtyupd = pwm_get_cdty(84000000, 32, duty_cycle);
-        PWM->PWM_CH_NUM[0].PWM_CDTYUPD = cdtyupd;
-    //}
+
+    if(duty_cycle > 0.01) { // før: 0.019
+        duty_cycle = 0.01;
+    }
+    uint32_t cdtyupd = pwm_get_cdty(84000000, 32, duty_cycle);
+    PWM->PWM_CH_NUM[0].PWM_CDTYUPD = cdtyupd;
 }
 
 
@@ -85,11 +85,15 @@ double pwm_percent_to_duty_cycle(char data) {
     if(data > 100) {data=100;}
     if(data < 0) {data=0;}
     double duty_cycle;
-    duty_cycle = 0.0009 + (((double)data * (0.01 - 0.0009))/(100));
+    duty_cycle = 0.0009 + (((double)data * (0.0021 - 0.0009))/(100));
     return duty_cycle;
 }
 
 double pwm_percent_to_duty_cycle_speed(char data) {
-
+    if(data > 100) {data=100;}
+    if(data < 0) {data=0;}
+    double duty_cycle;
+    duty_cycle = 0.0009 + (((double)data * (0.01 - 0.0009))/(100));
+    return duty_cycle;
 }
 

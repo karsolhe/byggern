@@ -59,7 +59,9 @@ int main()
 
     motor_driver_init();
 
-    int error_sum = 0;
+    int error_s = 0;
+    double u = 0;
+    int dir = 1;
 
     while(1) {
 
@@ -68,19 +70,41 @@ int main()
             CanMsg m;
             buffer_get(&m);
             uint8_t id = m.id;
-            
+
+            /*CAN_message sliders;
+            sliders.ID = 111;
+            sliders.length = 2;
+            sliders.data[0] = slide_perc.right;
+            sliders.data[1] = slide_perc.left;*/
+            uint32_t encoder_value;
             switch (id)
             {
             case 111:
                 //printf("Slider message recieved \n\r");
+                encoder_value = encoder_read_ch0();
+                //printf("encoder %d\n\r", encoder_value);
                 pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
+                //printf("Left slider value: %d\n\r", m.byte[1]);
+                //printf("Reference: %d\n\r", motor_driver_position_slider(m.byte[1]));
+                Controller c = motor_position_controller(motor_driver_position_slider(m.byte[1]), error_s);
+                error_s = c.error_sum;
+                u = c.u;
+                dir = c.dir;
+                printf("Direction: %d\n\r", dir);
+                motor_driver_dir(dir);
+                pwm_duty_cycle_update_speed(u);
+
+
+
+                //motor_driver_dir_slider(m.byte[1]);
+                //motor_driver_speed_slider(m.byte[1]);
                 //printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
                 break;
             case 222:
-                motor_driver_dir(m.byte[1]);
+                //motor_driver_dir(m.byte[1]);
                 //motor_driver_speed(m.byte[0]);
 
-                error_sum = motor_position_controller(m.byte[0], error_sum);
+                //error_sum = motor_position_controller(m.byte[0], error_sum);
 
 
                 //pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));
@@ -111,11 +135,11 @@ int main()
         //printf("Message sent\n\r");
 
         //!  EXERCISE 8
-        uint32_t encoder_value;
-        encoder_value = encoder_read_ch0();
+        // uint32_t encoder_value;
+        // encoder_value = encoder_read_ch0();
 
-        printf("encoder %d\n\r", encoder_value);
-        time_spinFor(msecs(100));
+        // printf("encoder %d\n\r", encoder_value);
+        // time_spinFor(msecs(100));
 
     }
 
