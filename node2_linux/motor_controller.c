@@ -14,10 +14,9 @@ Controller motor_position_controller(uint16_t pos_ref, int error_sum) {
         pos_measured = 0;
     }
     
-    //double encoder_calib = (((double)encoder_value-1400) * 100) / 1400;
-    //double encoder_calib = (((double)encoder_value) * 100) / 2800;
+    double pos_calib = (((double)pos_measured) * 100) / 2800;
 
-    double error = (double)pos_ref - pos_measured;
+    double error = (double)pos_ref - pos_calib;
 
     printf("Error %f\n\r", error);
     //printf("pos_ref: %d\n\r", pos_ref);
@@ -32,20 +31,22 @@ Controller motor_position_controller(uint16_t pos_ref, int error_sum) {
     } else { }
 
 
-    if(fabs(error) < 100) {
+    if(fabs(error) < 5) {
         error = 0;
     } 
 
     error_sum = error_sum + error;
 
-    double K_p = 0.000005;
-    double K_i = 0.000001;
+    double K_p = 0.05;
+    double K_i = 0.01;
 
-    double T = 0.001;
+    double T = 0.01;
 
-    uint8_t I = T * K_i * error_sum;
+    double I = T * K_i * error_sum;
 
-    double u;
+    printf("Integral: %f\n\r", I);
+
+    double u; // Want u between 0 and 0.02
 
     if(error == 0) {
         u = 0;

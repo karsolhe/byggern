@@ -233,6 +233,8 @@ void main() {
         sliders_t slide_perc = sliders_percent();
         uint8_t button = joystick_button();
         Direction dir = joystick_dir();
+        uint8_t touch_left = left_touch_button();
+        uint8_t touch_right = right_touch_button();
         
 
         char data2[8] = {
@@ -246,16 +248,22 @@ void main() {
 
 
         CAN_message m_joy_perc_x_dir;
-        m_joy_perc_x_dir.ID = 222;
+        m_joy_perc_x_dir.ID = 2;
         m_joy_perc_x_dir.length = 2;
         m_joy_perc_x_dir.data[0] = joy_perc.x;
         m_joy_perc_x_dir.data[1] = data_dir[0];
 
         CAN_message sliders;
-        sliders.ID = 111;
+        sliders.ID = 1;
         sliders.length = 2;
         sliders.data[0] = slide_perc.right;
         sliders.data[1] = slide_perc.left;
+
+        CAN_message buttons;
+        sliders.ID = 3;
+        sliders.length = 2;
+        sliders.data[0] = touch_left;
+        sliders.data[1] = touch_right;
 
         //CAN_send(&sliders);
         //_delay_ms(5);
@@ -263,6 +271,7 @@ void main() {
         // _delay_ms(100);
         //CAN_send(&m_joy_perc_x_dir);
         CAN_send(&sliders);
+        CAN_send(&buttons);
         _delay_ms(1);
 
         //printf("messages sent \n\r");

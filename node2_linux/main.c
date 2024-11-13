@@ -11,6 +11,7 @@
 #include "encoder.h"
 #include "motor_driver.h"
 #include "motor_controller.h"
+#include "solenoid.h"
 
 
 /*
@@ -51,13 +52,12 @@ int main()
 
     pwm_init();
     adc_init();
-
     encoder_init();
+    motor_driver_init();
+    solenoid_init();
     
     int hp = 5;
     time_spinFor(msecs(10));
-
-    motor_driver_init();
 
     int error_s = 0;
     double u = 0;
@@ -79,14 +79,14 @@ int main()
             uint32_t encoder_value;
             switch (id)
             {
-            case 111:
+            case 1:
                 //printf("Slider message recieved \n\r");
                 encoder_value = encoder_read_ch0();
                 //printf("encoder %d\n\r", encoder_value);
                 pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
                 //printf("Left slider value: %d\n\r", m.byte[1]);
                 //printf("Reference: %d\n\r", motor_driver_position_slider(m.byte[1]));
-                Controller c = motor_position_controller(motor_driver_position_slider(m.byte[1]), error_s);
+                Controller c = motor_position_controller(m.byte[1], error_s);
                 error_s = c.error_sum;
                 u = c.u;
                 dir = c.dir;
@@ -100,7 +100,7 @@ int main()
                 //motor_driver_speed_slider(m.byte[1]);
                 //printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
                 break;
-            case 222:
+            case 2:
                 //motor_driver_dir(m.byte[1]);
                 //motor_driver_speed(m.byte[0]);
 
@@ -108,6 +108,13 @@ int main()
 
 
                 //pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));
+                break;
+            case 3:
+
+                if(m.byte[0] == 1 || m.byte[1] == 1) {
+                    solenoid_trigger();
+                }
+
                 break;
             default:
                 break;
