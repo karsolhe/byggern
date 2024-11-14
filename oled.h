@@ -32,3 +32,7 @@ void OLED_set_brightness(int lvl);
 void OLED_print_arrow(uint8_t page, uint8_t column);
 
 void OLED_erase_arrow(uint8_t page, uint8_t column);
+
+void OLED_print_heart(uint8_t page, uint8_t column);
+
+void OLED_print_lives(int lives);

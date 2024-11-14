@@ -21,12 +21,8 @@ pos_t joystick_percent() {
     } else if(pos.x > 125) {
         pos.x = ((pos.x-125) * 100) / 125;
     }
-
     
     pos.y = (pos.y * 100) / 255;
-
-    //pos.x = ((pos.x - cal_pos.x_offset) * 100) / (255 - cal_pos.x_offset);
-    //pos.y = ((pos.y - cal_pos.y_offset) * 100) / (255 - cal_pos.y_offset);
 
     return pos;
 }
@@ -42,13 +38,13 @@ touch_buttons touch_button() {
     return buttons;
 }
 
-uint8_t left_touch_button() {
-    return (PINB & (1 << PB3)) ? 1 : 0;
-}
+// uint8_t left_touch_button() {
+//     return (PINB & (1 << PB3)) ? 1 : 0;
+// }
 
-uint8_t right_touch_button() {
-    return (PINB & (1 << PB1)) ? 1 : 0;
-}
+// uint8_t right_touch_button() {
+//     return (PINB & (1 << PB1)) ? 1 : 0;
+// }
 
 
 Direction joystick_dir() {

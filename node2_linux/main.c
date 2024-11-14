@@ -55,11 +55,12 @@ int main()
     encoder_init();
     motor_driver_init();
     solenoid_init();
+    timer_counter_init();
     
     int hp = 5;
     time_spinFor(msecs(10));
 
-    int error_s = 0;
+    double error_s = 0;
     double u = 0;
     int dir = 1;
 
@@ -67,33 +68,41 @@ int main()
 
         
         if(!buffer_is_empty()) {
+            //printf("Message recieved \n\r");
             CanMsg m;
             buffer_get(&m);
             uint8_t id = m.id;
-
             /*CAN_message sliders;
             sliders.ID = 111;
             sliders.length = 2;
             sliders.data[0] = slide_perc.right;
             sliders.data[1] = slide_perc.left;*/
-            uint32_t encoder_value;
+            //uint32_t encoder_value;
             switch (id)
             {
             case 1:
                 //printf("Slider message recieved \n\r");
-                encoder_value = encoder_read_ch0();
+                //encoder_value = encoder_read_ch0();
                 //printf("encoder %d\n\r", encoder_value);
                 pwm_duty_cycle_update(pwm_percent_to_duty_cycle(m.byte[0]));
                 //printf("Left slider value: %d\n\r", m.byte[1]);
                 //printf("Reference: %d\n\r", motor_driver_position_slider(m.byte[1]));
-                Controller c = motor_position_controller(m.byte[1], error_s);
-                error_s = c.error_sum;
-                u = c.u;
-                dir = c.dir;
-                printf("Direction: %d\n\r", dir);
-                motor_driver_dir(dir);
-                pwm_duty_cycle_update_speed(u);
 
+                if(update_controller_flag == 1) {
+                    update_controller_flag = 0;
+
+                    Controller c = motor_position_controller(m.byte[1], error_s);
+                    error_s = c.error_sum;
+                    u = c.u;
+                    dir = c.dir;
+                    motor_driver_dir(dir);
+                    pwm_duty_cycle_update_speed(u);
+                }
+
+                if(m.byte[2] == 1 || m.byte[3] == 1) {
+                    //printf("Recieved button push\n\r");
+                    solenoid_trigger();
+                }
 
 
                 //motor_driver_dir_slider(m.byte[1]);
@@ -101,20 +110,17 @@ int main()
                 //printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
                 break;
             case 2:
-                //motor_driver_dir(m.byte[1]);
-                //motor_driver_speed(m.byte[0]);
+                // motor_driver_dir(m.byte[1]);
+                // motor_driver_speed(m.byte[0]);
 
-                //error_sum = motor_position_controller(m.byte[0], error_sum);
+                // error_sum = motor_position_controller(m.byte[0], error_sum);
 
 
-                //pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));
+                // pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));
                 break;
             case 3:
-
-                if(m.byte[0] == 1 || m.byte[1] == 1) {
-                    solenoid_trigger();
-                }
-
+                printf("Touch button message recieved \n\r");
+                
                 break;
             default:
                 break;
@@ -128,18 +134,30 @@ int main()
         //uint16_t adc_data = adc_ir_read();
         //printf("adc value: %d\n\r", adc_data);
 
-        // ir_point_counter(&hp);
+        printf("Health points: %d\n\r", hp);
 
-        // printf("points: %d\n\r", hp);
+        int lost_life = ir_point_counter(&hp);
+        if(lost_life == 1){  
 
-        // if(hp <= 0) {
-        //     printf("you lost \n\r");
-        //     break;
-        // }
-      
+            uint8_t data[1];
 
-        //can_tx(m_2);
-        //printf("Message sent\n\r");
+            data[0] = hp;
+
+
+            CanMsg m = {
+                .id = 1,
+                .length = 1,
+                .byte = {data[0]},
+            };
+
+            can_tx(m);
+            printf("Message sent\n\r");
+        }
+
+        if(hp <= 0) {
+            printf("you lost \n\r");
+            break;
+        }
 
         //!  EXERCISE 8
         // uint32_t encoder_value;

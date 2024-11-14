@@ -8,10 +8,12 @@ uint8_t ir_read() {
     } else {return 0;}
 };
 
-void ir_point_counter(int *hp) {
+int ir_point_counter(int *hp) {
     if(ir_read() == 1) {
         (*hp)--;
         time_spinFor(msecs(80));
+        return 1;
     }
+    return 0;
 };
 

@@ -38,9 +38,9 @@ uint8_t joystick_button();
 
 touch_buttons touch_button();
 
-uint8_t left_touch_button();
+// uint8_t left_touch_button();
 
-uint8_t right_touch_button();
+// uint8_t right_touch_button();
 
 sliders_t sliders_pos();
 

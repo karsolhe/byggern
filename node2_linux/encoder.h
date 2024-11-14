@@ -7,5 +7,5 @@
 
 void encoder_init();
 
-uint32_t encoder_read_ch0();
+int encoder_read_ch0();
 

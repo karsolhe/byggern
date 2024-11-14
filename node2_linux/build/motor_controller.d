@@ -74,5 +74,6 @@ build/motor_controller.o: motor_controller.c motor_controller.h \
  sam/sam3x/include/instance/instance_gpbr.h \
  sam/sam3x/include/pio/pio_sam3x8e.h \
  sam/sam3x/include/component/component_pio.h encoder.h \
- sam/sam3x/include/component/component_tc.h sam/sam3x/include/sam.h \
- motor_driver.h
+ sam/sam3x/include/component/component_tc.h sam/sam3x/include/sam.h pwm.h \
+ sam/sam3x/include/component/component_pwm.h motor_driver.h \
+ sam/sam3x/include/sam3x8e.h

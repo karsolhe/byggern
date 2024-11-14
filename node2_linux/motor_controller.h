@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include "encoder.h"
 #include <math.h>
+#include "pwm.h"
+
+extern volatile int update_controller_flag;
+
+void timer_counter_init();
 
 typedef struct PID{
     double u;
@@ -11,5 +16,5 @@ typedef struct PID{
     double error_sum;
 } Controller;
 
-Controller motor_position_controller(uint16_t pos_ref, int error_sum);
+Controller motor_position_controller(uint16_t pos_ref, double error_sum);
 

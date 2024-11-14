@@ -72,8 +72,8 @@ void pwm_duty_cycle_update(double duty_cycle) {
 
 void pwm_duty_cycle_update_speed(double duty_cycle) {
 
-    if(duty_cycle > 0.020) { // før: 0.019
-        duty_cycle = 0.020;
+    if(duty_cycle >= 0.019) { // før: 0.019
+        duty_cycle = 0.019;
     }
     uint32_t cdtyupd = pwm_get_cdty(84000000, 32, duty_cycle);
     PWM->PWM_CH_NUM[0].PWM_CDTYUPD = cdtyupd;

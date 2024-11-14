@@ -81,10 +81,6 @@ void OLED_print_arrow(uint8_t page, uint8_t column){
 
 void OLED_erase_arrow(uint8_t page, uint8_t column){
     OLED_pos(page, column);
-    // for(int i = 0; i < 5; i++) {
-    //     OLED_write_data(0);
-    // }
-
     OLED_write_data(0);
     OLED_write_data(0);
     OLED_write_data(0);
@@ -92,6 +88,29 @@ void OLED_erase_arrow(uint8_t page, uint8_t column){
     OLED_write_data(0);
 }
 
+void OLED_print_heart(uint8_t page, uint8_t column){
+    OLED_pos(page, column);
+    OLED_write_data(0b00001100);
+    OLED_write_data(0b00011110);
+    OLED_write_data(0b00111111);
+    OLED_write_data(0b01111110);
+    OLED_write_data(0b11111100);
+    OLED_write_data(0b01111110);
+    OLED_write_data(0b00111111);
+    OLED_write_data(0b00011110);
+    OLED_write_data(0b00001100);
+}
+
+void OLED_print_lives(int lives){
+    OLED_reset();
+    OLED_pos(1, 20);
+
+    OLED_print_string("Lives left: ");
+
+    for(int i = 1; i < lives+1; i++){
+        OLED_print_heart(4, i*20);
+    }
+}
 
 void OLED_init() {
     write_c(0xae); // display off

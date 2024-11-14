@@ -3,5 +3,5 @@
 
 uint8_t ir_read();
 
-void ir_point_counter(int *hp);
+int ir_point_counter(int *hp);
 
