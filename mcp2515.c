@@ -3,7 +3,7 @@
 
 
 void mcp_init( ) {
-    spi_master_init();
+    spi_init();
     mcp_reset();
     _delay_ms(1);
 }

@@ -6,8 +6,10 @@
 #include <avr/delay.h>
 
 int game_started;
+int menu;
 
-void OLED_create_home_menu() {
+void menu_create_home_menu() {
+    OLED_reset();
     OLED_pos(0, 20);
     OLED_print_string("Ping-pong Game!");
     OLED_pos(2, 30);
@@ -17,7 +19,8 @@ void OLED_create_home_menu() {
 
 };
 
-void OLED_create_difficulty_menu() {
+void menu_create_difficulty_menu() {
+    OLED_reset();
     OLED_pos(0, 20);
     OLED_print_string("Choose Difficulty:");
     OLED_pos(2, 30);
@@ -28,10 +31,10 @@ void OLED_create_difficulty_menu() {
     OLED_print_string("Hard");
 };
 
-int OLED_navigate_menu() {
+int menu_navigate() {
 
     uint8_t joy_button = joystick_button();
-    int page = 2;
+    int page = 0;
     OLED_print_arrow(page, 10);
 
     while(joy_button != 1) {
@@ -55,16 +58,17 @@ int OLED_navigate_menu() {
             _delay_ms(1000);
         }
     }
-
+    _delay_ms(1000);
     return page;
 };
 
-void OLED_select_menu_item(int page) {
+void menu_select_item(int page) {
      switch(page) {
         case 0:
             OLED_reset();
             OLED_pos(3, 0);
             OLED_print_string("Troika");
+            _delay_ms(2000);
             break;
         case 1:
             OLED_reset();
@@ -86,12 +90,49 @@ void OLED_select_menu_item(int page) {
             break;
         case 4:
             OLED_reset();
-            OLED_create_difficulty_menu();
-            
+            menu_create_difficulty_menu();
+            menu = 1;
+            break;
+        default:
+            menu = 0;
             break;
     }
 }
 
-void OLED_select_difficulty_item(int page) {
-
+CAN_message menu_select_difficulty_item(int page) {
+    CAN_message difficulty = {};
+     switch(page) {
+        case 0:
+            OLED_reset();
+            OLED_pos(3, 0);
+            OLED_print_string("Troika");
+            break;
+        case 1:
+            OLED_reset();
+            OLED_pos(3, 0);
+            OLED_print_string("Japp");
+            break;
+        case 2:
+            menu = 0;
+            difficulty.ID = 2;
+            difficulty.length = 1;
+            difficulty.data[0] = 0;
+            break;
+        case 4:
+            menu = 0;
+            difficulty.ID = 2;
+            difficulty.length = 1;
+            difficulty.data[0] = 1;
+            break;
+        case 6:
+            menu = 0;
+            difficulty.ID = 2;
+            difficulty.length = 1;
+            difficulty.data[0] = 2;
+            break;
+        default:
+            menu_create_difficulty_menu();
+            break;
+    }
+    return difficulty;
 }

@@ -7,7 +7,7 @@
 #define DD_SS DDB4
 
 
-void spi_master_init();
+void spi_init();
 
 void spi_slave_unselect();
 

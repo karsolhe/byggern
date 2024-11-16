@@ -19,6 +19,6 @@ void adc_init() {
 
 uint16_t adc_ir_read() {
     uint16_t data;
-    data = ADC->ADC_LCDR;
+    data = ADC->ADC_LCDR; //last converted data register
     return data;
 }

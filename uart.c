@@ -4,15 +4,15 @@ void uart_init(unsigned int ubrr) {
     UBRR0L = (unsigned char)ubrr; 
     UBRR0H = (unsigned char)(ubrr>>8);
     
-    UCSR0B = (1<<RXEN0) | (1<<TXEN0); //Enable receiver and transmitter
-    UCSR0C = (1<<URSEL0) | (1<<USBS0) | (3<<UCSZ00); //Set frame format: 8 data bit, 2 stop bit
+    UCSR0B = (1<<RXEN0) | (1<<TXEN0); //Enable receiver, enable transmitter
+    UCSR0C = (1<<URSEL0) | (1<<USBS0) | (3<<UCSZ00); // 8 data bit, 2 stop bit
 
     fdevopen(uart_send, uart_receive);
 }
 
 int uart_send(unsigned char data, FILE * file) {
 
-    while(!(UCSR0A & (1<<UDRE0))); //Wait for empty transmit buffer
+    while(!(UCSR0A & (1<<UDRE0))); //While transfer buffer is not empty
     UDR0 = data;
 
     return 0;
@@ -21,21 +21,21 @@ int uart_send(unsigned char data, FILE * file) {
 
 int uart_receive(FILE * file) {
 
-    while(!(UCSR0A & (1<<RXC0))); //Wait till data is received
+    while(!(UCSR0A & (1<<RXC0))); //While recieve buffer is empty
     return UDR0;
 
 }
 
 // void uart_send(unsigned char data) {
 
-//     while(!(UCSR0A & (1<<UDRE0))); //Wait for empty transmit buffer
+//     while(!(UCSR0A & (1<<UDRE0))); 
 //     UDR0 = data;
 
 // }
 
 // unsigned char uart_receive(void) {
 
-//     while(!(UCSR0A & (1<<RXC0))); //Wait till data is received
+//     while(!(UCSR0A & (1<<RXC0))); 
 //     return UDR0;
 
 // }

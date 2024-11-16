@@ -14,11 +14,9 @@ void write_d(uint8_t data) {
     oled_d[0] = data;
 }
 
-void OLED_home(){
 
-}
 
-void OLED_goto_page(uint8_t page){  //kanksje heller kall goto_page
+void OLED_goto_page(uint8_t page){  
     write_c(0xb0 + page); //set page start address
 }
 

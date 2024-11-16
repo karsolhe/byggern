@@ -4,6 +4,8 @@
 #include "sam/sam3x/include/sam3x8e.h"
 
 volatile int update_controller_flag = 0;
+volatile double K_p;
+volatile double K_i;
 
 void timer_counter_init() {
     PMC->PMC_PCER0 |= (1 << ID_TC1);
@@ -65,8 +67,8 @@ Controller motor_position_controller(uint16_t pos_ref, double error_sum) {
 
     printf("Error sum: %f\n\r", error_sum);
 
-    double K_p = 0.00015;
-    double K_i = 0.00001;
+    K_p = 0.00015;
+    K_i = 0.00001;
 
     double T = 0.01;
 

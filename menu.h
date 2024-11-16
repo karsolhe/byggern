@@ -1,13 +1,14 @@
 #include <avr/io.h>
+#include "can.h"
 
 extern int game_started;
 
-void OLED_create_home_menu();
+extern int menu;
 
-void OLED_create_menu();
+void menu_create_home_menu();
 
-int OLED_navigate_menu();
+int menu_navigate();
 
-void OLED_select_menu_item(int page);
+void menu_select_item(int page);
 
-void OLED_select_difficulty_item(int page);
+CAN_message menu_select_difficulty_item(int page);

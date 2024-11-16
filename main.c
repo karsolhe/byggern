@@ -20,6 +20,7 @@ void main() {
 
     uart_init(MYUBRR);
     //uart_test();
+
     //!EXERCISE 2
 
     latch_init();
@@ -47,7 +48,7 @@ void main() {
     //! EXERCISE 6
 
     mcp_timing(); //endrer på alle cnf registerene i riktig rekkefølge
-    mcp_write(MCP_RXB0CTRL, 0b01100000); //Sets receive buffer 0 to receive all messages)
+    mcp_write(MCP_RXB0CTRL, 0b01100000); //Sets receive buffer 0 to receive all messages
     mcp_write(MCP_RX_INT, 0b00000011); //Enables both receive buffers to generate an interrupt on message reception
     mcp_set_mode(MODE_NORMAL);
     
@@ -63,12 +64,24 @@ void main() {
     game_started = 0;
     int lives = 5;
 
-    OLED_create_home_menu();
+    //menu_create_home_menu();
+    menu = 0;
+    CAN_message diff = {.ID = 2, .length = 1, .data[0] = 0};
 
     while(!game_started) {
-        int page = OLED_navigate_menu();
-        OLED_select_menu_item(page);
+        int page;
+        if(menu == 0) {
+            menu_create_home_menu();
+            page = menu_navigate();
+            menu_select_item(page);
+        } else {
+            page = menu_navigate();
+            diff = menu_select_difficulty_item(page);
+        }
     }
+
+    CAN_send(&diff);
+    _delay_ms(1000);
 
     while(1) {
 
@@ -98,16 +111,6 @@ void main() {
         //printf("Right button: %d\n\r", buttons.right);
         //printf("Left button: %d\n\r", buttons.left);
         
-        
-
-        // char data2[8] = {
-        //     joy_perc.x,
-        //     joy_perc.y
-        // };
-
-        char data_dir[8] = {
-            dir
-        };
 
 
         // CAN_message m_joy_perc_x_dir;

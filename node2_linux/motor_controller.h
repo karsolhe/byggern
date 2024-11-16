@@ -7,6 +7,8 @@
 #include "pwm.h"
 
 extern volatile int update_controller_flag;
+extern volatile double K_p;
+extern volatile double K_i; 
 
 void timer_counter_init();
 

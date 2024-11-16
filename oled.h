@@ -11,8 +11,6 @@ void write_d(uint8_t data);
 
 void OLED_reset();
 
-void OLED_home();
-
 void OLED_goto_page(uint8_t page);
 
 void OLED_goto_column(uint8_t column);

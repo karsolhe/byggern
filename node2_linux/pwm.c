@@ -35,16 +35,18 @@ void pwm_init() {
     while((PWM->PWM_SR & (1<<1)));
     printf("pwm disabled\n\r");
 
+    //first PWM channel for servo
     PWM->PWM_CLK = ((1<<16 ) | 1); 
     PWM->PWM_CH_NUM[1].PWM_CMR = 0b0101; //PWM Channel Mode Register, sets MCK as clock for channel 0
     PWM->PWM_CH_NUM[1].PWM_CMR &= ~(1<<8); //0 = The period is left aligned, vil ha left aligned
     PWM->PWM_CH_NUM[1].PWM_CMR |= PWM_CMR_CPOL; // 1 = The OCx output waveform (output from the comparator) starts at a high level.
 
+    //second PWM channel, for encoder
     PWM->PWM_CH_NUM[0].PWM_CMR = 0b0101; //PWM Channel Mode Register, sets MCK as clock for channel 0
     PWM->PWM_CH_NUM[0].PWM_CMR &= ~(1<<8); //0 = The period is left aligned, vil ha left aligned
     PWM->PWM_CH_NUM[0].PWM_CMR |= PWM_CMR_CPOL; // 1 = The OCx output waveform (output from the comparator) starts at a high level.
 
-   
+    //
     PWM->PWM_CH_NUM[1].PWM_CPRD = pwm_get_cprd(84000000, 32, 0.02);
     PWM->PWM_CH_NUM[1].PWM_CDTY = pwm_get_cdty(84000000, 32, 0.0015);
 

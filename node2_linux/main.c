@@ -64,6 +64,9 @@ int main()
     double u = 0;
     int dir = 1;
 
+
+    
+
     while(1) {
 
         
@@ -107,16 +110,34 @@ int main()
 
                 //motor_driver_dir_slider(m.byte[1]);
                 //motor_driver_speed_slider(m.byte[1]);
-                //printf("Duty cycle: %f\n\r", pwm_percent_to_duty_cycle(m.byte[0]));
-                break;
-            case 2:
-                // motor_driver_dir(m.byte[1]);
+                //printf("Duty cycle: %f\n\r", pwm_perce// motor_driver_dir(m.byte[1]);
                 // motor_driver_speed(m.byte[0]);
 
                 // error_sum = motor_position_controller(m.byte[0], error_sum);
 
 
-                // pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));
+                // pwm_duty_cycle_update_speed(pwm_percent_to_duty_cycle(m.byte[0]));nt_to_duty_cycle(m.byte[0]));
+                break;
+            case 2:
+                switch(m.byte[0])
+                {
+                case 0:
+                    K_p = 0.00015;
+                    K_i = 0.00001;
+                    break;
+                case 1:
+                    K_p = 0.000015;
+                    K_i = 0.00001;
+                    break;
+                case 2:
+                    K_p = 0.015;
+                    K_i = 0.00001;
+                    break;
+                default:
+                    K_p = 0.00015;
+                    K_i = 0.00001;
+                    break;
+                }
                 break;
             case 3:
                 printf("Touch button message recieved \n\r");
