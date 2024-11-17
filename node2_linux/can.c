@@ -21,6 +21,7 @@ void can_printmsg(CanMsg m){
 
 CircularBuffer msgBuffer;
 
+// Initalize CAN
 void can_init(CanInit init, uint8_t rxInterrupt){
     // Disable CAN
     CAN0->CAN_MR &= ~CAN_MR_CANEN; 
@@ -109,10 +110,6 @@ uint8_t can_rx(CanMsg* m){
     CAN0->CAN_MB[rxMailbox].CAN_MCR |= CAN_MCR_MTCR;
     return 1;
 }
-    
-    
-
-    
 
 // Example CAN interrupt handler
 void CAN0_Handler(void){
@@ -134,13 +131,13 @@ void CAN0_Handler(void){
     NVIC_ClearPendingIRQ(ID_CAN0);
 } 
 
-
-
+// Create buffer for CAN messages
 void buffer_init(void) {
     msgBuffer.head = 0;
     msgBuffer.tail = 0;
 }
 
+// Add CAN message to buffer if buffer is not full, returns true if message is added
 bool buffer_add(const CanMsg *msg) {
     uint32_t next = (msgBuffer.head + 1) % 5;
     
@@ -154,6 +151,7 @@ bool buffer_add(const CanMsg *msg) {
     return true;
 }
 
+// Get CAN message from buffer if it is not empty, returns true if message is received
 bool buffer_get(CanMsg *msg) {
     if (msgBuffer.head == msgBuffer.tail) {
         return false;  // Buffer empty
@@ -165,6 +163,7 @@ bool buffer_get(CanMsg *msg) {
     return true;
 }
 
+// Check if buffer is empty
 bool buffer_is_empty(void) {
     return msgBuffer.head == msgBuffer.tail;
 }

@@ -6,11 +6,9 @@
 #include "adc.h"
 #include "oled.h"
 #include "menu.h"
-#include "can.h"
+//#include "can.h"
 
 #define F_CPU 4915200 
-
-
 
 volatile char *oled_c = (char *) 0x1000;
 volatile char *oled_d = (char *) 0x1200;
@@ -33,13 +31,11 @@ void main() {
     PORTB |= (1 << PB2); // Set pull-up resistor, joystick button
 
     adc_init();
-    
 
     //!EXERCISE 4
 
     OLED_init();
     OLED_reset();
-
 
     //!EXERCISE 5
 
@@ -47,27 +43,22 @@ void main() {
 
     //! EXERCISE 6
 
-    mcp_timing(); //endrer på alle cnf registerene i riktig rekkefølge
+    mcp_timing(); // Set timing
     mcp_write(MCP_RXB0CTRL, 0b01100000); //Sets receive buffer 0 to receive all messages
     mcp_write(MCP_RX_INT, 0b00000011); //Enables both receive buffers to generate an interrupt on message reception
     mcp_set_mode(MODE_NORMAL);
     
 
-    // uint8_t mode = mcp_check_mode();
-
-    // CAN_message message = {
-    //     1,
-    //     8,
-    //     "Troika"
-    // };
+    //! EXERCISE 7 & 8
 
     game_started = 0;
     int lives = 5;
 
-    //menu_create_home_menu();
+    menu_create_home_menu();
     menu = 0;
     CAN_message diff = {.ID = 2, .length = 1, .data[0] = 0};
 
+    // Navigating through menus on OLED
     while(!game_started) {
         int page;
         if(menu == 0) {
@@ -75,50 +66,39 @@ void main() {
             page = menu_navigate();
             menu_select_item(page);
         } else {
+            menu_create_difficulty_menu();
             page = menu_navigate();
             diff = menu_select_difficulty_item(page);
         }
     }
 
+    // Send chosen difficulty = parameters for PI controller over CAN
     CAN_send(&diff);
     _delay_ms(1000);
 
+    // Game starts
     while(1) {
-
-    //CAN_send(&message);
-
-
 
         if(mcp_read(MCP_CANINTF) & 0b00000001) { //
             CAN_message m = CAN_recieve();
             lives = m.data[0];
 
             OLED_print_lives(lives);
-            printf("Message recieved\r\n");
-            printf("ID: %d\r\n", m.ID);
-            printf("Length: %d\r\n", m.length);
-            printf("Data: %s\r\n", m.data);
-            mcp_write(MCP_CANINTF, 0b00000001);
+            if (lives <= 0) {
+                OLED_reset();
+                OLED_pos(4, 45);
+                OLED_print_string("You Lost :(");
+            }
+            mcp_write(MCP_CANINTF, 0b00000000); //!
         }
 
         //pos_t joy_p = joystick_pos();
-        //pos_t joy_perc = joystick_percent();
+        pos_t joy_perc = joystick_percent();
         sliders_t slide_perc = sliders_percent();
         uint8_t button = joystick_button();
         Direction dir = joystick_dir();
         touch_buttons buttons = touch_button();
-
-        //printf("Right button: %d\n\r", buttons.right);
-        //printf("Left button: %d\n\r", buttons.left);
         
-
-
-        // CAN_message m_joy_perc_x_dir;
-        // m_joy_perc_x_dir.ID = 2;
-        // m_joy_perc_x_dir.length = 2;
-        // m_joy_perc_x_dir.data[0] = joy_perc.x;
-        // m_joy_perc_x_dir.data[1] = data_dir[0];
-
         CAN_message sliders;
         sliders.ID = 1;
         sliders.length = 4;
@@ -126,16 +106,16 @@ void main() {
         sliders.data[1] = slide_perc.left;
         sliders.data[2] = buttons.left;
         sliders.data[3] = buttons.right;  
-        
-        // CAN_send(&message);
-        
-        //CAN_send(&m_joy_perc_x_dir);
-        CAN_send(&sliders);
-        //_delay_ms(1);
 
-        printf("messages sent \n\r");
-
-    
+        CAN_message joystick;
+        joystick.ID = 1;
+        joystick.length = 4;
+        joystick.data[0] = joy_perc.y;
+        joystick.data[1] = joy_perc.x;
+        joystick.data[2] = buttons.left;
+        joystick.data[3] = buttons.right;
+        
+        CAN_send(&joystick);
      }
        
 };

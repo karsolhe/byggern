@@ -2,6 +2,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+// Test to see if chip select logic works
 void address_decoder_test() {
     
     volatile char *oled_c = (char *) 0x1000;

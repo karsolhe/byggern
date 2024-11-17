@@ -4,18 +4,21 @@
 #include "SRAM.h"
 #include <avr/io.h>
 
+// Initialize SRAM
 void SRAM_init(void) {
-    MCUCR |= (1 << SRE); //Enable external memory
-    SFIOR &= ~(0b111<<XMM0); //Clears the three last bits
-    SFIOR |= (1 << XMM2); //Disables pins used by JTAG
+    MCUCR |= (1 << SRE); // Enable external memory
+    SFIOR &= ~(0b111<<XMM0); // Clears the three last bits
+    SFIOR |= (1 << XMM2); // Disables pins used by JTAG
 }
 
+// Convert num to binary (for debugging)
 void print_binary(uint8_t num) {
     for (int i = 7; i >= 0; i--) {
         printf("%d", (num >> i) & 1);
     }
 }
 
+// Test SRAM for read and write operations
 void SRAM_test(void) { 
     volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
     uint16_t ext_ram_size = 0x800;

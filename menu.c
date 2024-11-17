@@ -37,10 +37,9 @@ int menu_navigate() {
     int page = 0;
     OLED_print_arrow(page, 10);
 
+    // Navigates menu until joystick button is pressed
     while(joy_button != 1) {
         joy_button = joystick_button();
-        //printf("Joystick button: %d\n\r", joy_button);
-        //_delay_ms(500);
 
         pos_t pos = joystick_percent();
         
@@ -86,12 +85,12 @@ void menu_select_item(int page) {
 
             OLED_print_lives(5);
             game_started = 1;
-            // Create life count with hearts
             break;
         case 4:
             OLED_reset();
             menu_create_difficulty_menu();
             menu = 1;
+            _delay_ms(1000);
             break;
         default:
             menu = 0;

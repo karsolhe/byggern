@@ -2,8 +2,7 @@
 #include "encoder.h"
 #include "pwm.h"
 
-
-
+// Initialize motor driver
 void motor_driver_init() {
     //phase/dir pin is PC23
     PIOC->PIO_PER = PIO_PER_P23;
@@ -11,14 +10,7 @@ void motor_driver_init() {
 
 }
 
-/*typedef enum Direction {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    NEUTRAL
-}Direction;*/
-
+// Sets direction for motor
 void motor_driver_dir(char data) {
     if(data == 0) {
         PIOC->PIO_SODR = PIO_PER_P23;
@@ -30,6 +22,7 @@ void motor_driver_dir(char data) {
 
 }
 
+// Set direction based on slider position
 void motor_driver_dir_slider(char data) {
     if(data < 50) {
         PIOC->PIO_SODR = PIO_PER_P23;

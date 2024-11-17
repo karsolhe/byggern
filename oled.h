@@ -1,8 +1,5 @@
 #include <avr/io.h>
 
-//#define oled_c ((volatile char *) 0x1000)
-//#define oled_d ((volatile char *) 0x1200)
-
 void OLED_init();
 
 void write_c(uint8_t data);
@@ -24,8 +21,6 @@ void OLED_write_data(char c);
 void OLED_print_char(char c);
 
 void OLED_print_string(char* str);
-
-void OLED_set_brightness(int lvl);
 
 void OLED_print_arrow(uint8_t page, uint8_t column);
 

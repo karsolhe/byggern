@@ -1,13 +1,15 @@
 #include "latch.h"
 
+// Initialize latch
 void latch_init() {
-    DDRE = 0b010; //Set ALE signal to output
+    DDRE = 0b10; // Set pin on Port E to output
 
-    PORTE = 0b10;
+    PORTE = 0b10; // Enable latch, by setting ALE signal
 
-    DDRA = 0b11111111; 
+    DDRA = 0b11111111; // Set all pins on Port A to output
 }
 
+// Test latch
 void led_test() {
 
     PORTA = 0b00000001;

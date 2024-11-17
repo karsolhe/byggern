@@ -8,7 +8,7 @@
 #define F_CPU 4915200
 
 
-
+// Initialize the ADC
 void adc_init() {
 
     DDRD |= (1 << PD4); // Set pin D4 to output
@@ -31,6 +31,7 @@ void adc_init() {
 
 }
 
+// Read a channel from the ADC
 uint8_t adc_read(uint8_t channel) {
 
     volatile char *adc = (char*) 0x1400;

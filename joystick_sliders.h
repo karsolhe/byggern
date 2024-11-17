@@ -29,18 +29,11 @@ typedef struct touch_buttons{
     int right;
 } touch_buttons;
 
-
-//void joystick_calibrate(joy_cal_pos *cal_pos);
-
 enum Direction joystick_dir();
 
 uint8_t joystick_button();
 
 touch_buttons touch_button();
-
-// uint8_t left_touch_button();
-
-// uint8_t right_touch_button();
 
 sliders_t sliders_pos();
 

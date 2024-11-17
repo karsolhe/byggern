@@ -22,14 +22,12 @@ __attribute__((packed)) struct CanInit {
     };
 };
 
-
 // Initialize CAN bus, with bit timings and optional interrupt
 // If `rxInterrupt` is not 0, an interrupt will be triggered when a message is received.
 // (See can.c for an example interrupt handler)
 // Example:
 //    can_init((CanInit){.brp = F_CPU/2000000-1, .phase1 = 5, .phase2 = 1, .propag = 6}, 0);
 void can_init(CanInit init, uint8_t rxInterrupt);
-
 
 /*
 // Strict-aliasing-safe reinterpret-cast
@@ -84,7 +82,6 @@ struct CanMsg {
     };    
 };
 
-
 typedef struct {
     CanMsg buffer[5];
     volatile uint32_t head;  // Write index
@@ -92,24 +89,15 @@ typedef struct {
 } CircularBuffer;
 
 extern CircularBuffer msgBuffer;
-
 // Send a CAN message on the bus. 
 // Blocks if the bus does not receive the message (typically because one of the 
 // receiving nodes has not cleared a buffer)
 void can_tx(CanMsg m);
-
 // Receive a CAN message.
 // Does not block. Returns 0 if there is no message, 1 otherwise
 uint8_t can_rx(CanMsg* m);
-
 // Print a CAN message (using `printf`)
 void can_printmsg(CanMsg m);
-
-
-
-
-
-
 void buffer_init(void);
 // Add message to buffer - called from handler
 bool buffer_add(const CanMsg *msg);

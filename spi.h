@@ -13,7 +13,7 @@ void spi_slave_unselect();
 
 void spi_slave_select();
 
-void spi_transmit(char cData);
+void spi_transmit(char data);
 
 uint8_t spi_recieve();
 

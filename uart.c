@@ -1,5 +1,6 @@
 #include "uart.h" 
 
+// Initalize UART
 void uart_init(unsigned int ubrr) {
     UBRR0L = (unsigned char)ubrr; 
     UBRR0H = (unsigned char)(ubrr>>8);
@@ -10,18 +11,20 @@ void uart_init(unsigned int ubrr) {
     fdevopen(uart_send, uart_receive);
 }
 
+// Send data, enables printf
 int uart_send(unsigned char data, FILE * file) {
 
-    while(!(UCSR0A & (1<<UDRE0))); //While transfer buffer is not empty
+    while(!(UCSR0A & (1<<UDRE0))); // While transfer buffer is not empty
     UDR0 = data;
 
     return 0;
 
 }
 
+// Recieves data, enables printf
 int uart_receive(FILE * file) {
 
-    while(!(UCSR0A & (1<<RXC0))); //While recieve buffer is empty
+    while(!(UCSR0A & (1<<RXC0))); // While recieve buffer is empty
     return UDR0;
 
 }
@@ -40,6 +43,7 @@ int uart_receive(FILE * file) {
 
 // }
 
+// Test for UART
 // void uart_test() {
 //     while(1) {
 //         // unsigned char received_data = uart_receive();

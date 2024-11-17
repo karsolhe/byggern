@@ -1,6 +1,6 @@
 #include "solenoid.h"
 
-
+// Initialize solenoid
 void solenoid_init() {
     
     PMC->PMC_PCER0 |= (1 << ID_PIOC);
@@ -11,6 +11,7 @@ void solenoid_init() {
     PIOC->PIO_SODR |= PIO_SODR_P15;
 }
 
+// Triggers solenoid 
 void solenoid_trigger() {
     PIOC->PIO_CODR |= PIO_CODR_P15;
     time_spinFor(msecs(25));

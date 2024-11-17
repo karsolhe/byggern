@@ -7,6 +7,8 @@ extern int menu;
 
 void menu_create_home_menu();
 
+void menu_create_difficulty_menu();
+
 int menu_navigate();
 
 void menu_select_item(int page);
